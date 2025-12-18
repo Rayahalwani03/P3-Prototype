@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-neutral-50 font-body text-neutral-900 antialiased transition-colors duration-300 dark:bg-neutral-950 dark:text-neutral-100;
+}
+
+#root {
+  @apply min-h-screen;
+}
