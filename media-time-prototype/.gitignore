@@ -36,6 +36,4 @@ dist-ssr
 .Trashes
 ehthumbs.db
 Thumbs.db
-# Large media files (add manually or use Git LFS)
-public/media/*.mp4
-public/media/*.m4a
+# Note: Media files are included in the repository for Vercel deployment
