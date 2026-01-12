@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import ReactPlayer from 'react-player'
 import { motion } from 'framer-motion'
 import type { MediaCondition } from '../types'
 import { MEDIA_CONTENT } from '../data/mediaContent'
 import { useSettings } from '../context/SettingsContext'
+import { Button } from './shared/Button'
 
 const Player = ReactPlayer as unknown as (props: Record<string, unknown>) => ReactElement
 
@@ -26,50 +27,89 @@ export function MediaPlayer({ condition, playing, onReady, onError }: MediaPlaye
   const topic = meta.topic[language]
   const title = meta.title[language]
   const description = meta.description[language]
-  const [hasAttemptedFullscreen, setHasAttemptedFullscreen] = useState(false)
+  const [userInteracted, setUserInteracted] = useState(false)
+  const [playerReady, setPlayerReady] = useState(false)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const handlePlayerError = (event: unknown) => {
     const normalized = event instanceof Error ? event : new Error('Playback error')
     onError?.(normalized)
   }
 
+  const handleUserInteraction = async () => {
+    setUserInteracted(true)
+    if (condition === 'video' && videoRef.current) {
+      try {
+        videoRef.current.muted = false
+        await videoRef.current.play()
+      } catch (error) {
+        handlePlayerError(error)
+      }
+    } else if (condition === 'audio' && audioRef.current) {
+      try {
+        audioRef.current.muted = false
+        await audioRef.current.play()
+      } catch (error) {
+        handlePlayerError(error)
+      }
+    }
+  }
+
+  const handlePlayerReady = () => {
+    setPlayerReady(true)
+    onReady?.()
+  }
+
   useEffect(() => {
-    setHasAttemptedFullscreen(false)
+    setUserInteracted(false)
+    setPlayerReady(false)
   }, [condition])
 
   useEffect(() => {
-    if (!playing || hasAttemptedFullscreen) return
-    const timeout = window.setTimeout(() => {
-      if (document.fullscreenElement) return
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement
-          .requestFullscreen()
-          .catch(() => {
-            // Ignore failures; browsers may require user activation.
-          })
-          .finally(() => setHasAttemptedFullscreen(true))
+    if (condition === 'video' && videoRef.current) {
+      if (playing && userInteracted) {
+        videoRef.current.play().catch(handlePlayerError)
+      } else {
+        videoRef.current.pause()
       }
-    }, 600)
-
-    return () => window.clearTimeout(timeout)
-  }, [playing, hasAttemptedFullscreen])
+    } else if (condition === 'audio' && audioRef.current) {
+      if (playing && userInteracted) {
+        audioRef.current.play().catch(handlePlayerError)
+      } else {
+        audioRef.current.pause()
+      }
+    }
+  }, [condition, playing, userInteracted])
 
   const mediaCard = (() => {
     switch (condition) {
       case 'video':
         return (
           <div className="relative aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-soft">
-            <Player
-              url={meta.url ?? ''}
-              width="100%"
-              height="100%"
-              playing={playing}
+            <video
+              ref={videoRef}
+              src={meta.url ?? ''}
+              className="h-full w-full object-contain"
+              playsInline
+              muted={!userInteracted}
               controls={false}
-              onReady={onReady}
-              onError={handlePlayerError}
+              onLoadedMetadata={handlePlayerReady}
+              onError={(e) => handlePlayerError(e)}
             />
             {meta.poster && (
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
+            )}
+            {!userInteracted && playerReady && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                <Button
+                  size="lg"
+                  onClick={handleUserInteraction}
+                  className="bg-white/90 text-black hover:bg-white"
+                >
+                  {messages.media.playButton}
+                </Button>
+              </div>
             )}
           </div>
         )
@@ -100,15 +140,24 @@ export function MediaPlayer({ condition, playing, onReady, onError }: MediaPlaye
                 </div>
               </div>
             </div>
-            <Player
-              url={meta.url ?? ''}
-              width="0"
-              height="0"
-              playing={playing}
-              controls={false}
-              onReady={onReady}
-              onError={handlePlayerError}
+            <audio
+              ref={audioRef}
+              src={meta.url ?? ''}
+              muted={!userInteracted}
+              onLoadedMetadata={handlePlayerReady}
+              onError={(e) => handlePlayerError(e)}
             />
+            {!userInteracted && playerReady && (
+              <div className="mt-4 flex justify-center">
+                <Button
+                  size="lg"
+                  onClick={handleUserInteraction}
+                  className="bg-white/90 text-brand-700 hover:bg-white"
+                >
+                  {messages.media.playButton}
+                </Button>
+              </div>
+            )}
           </div>
         )
       case 'text':

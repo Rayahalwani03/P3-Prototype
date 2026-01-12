@@ -56,6 +56,24 @@ export function MediaScreen() {
     triggerCompletion()
   }, [condition, triggerCompletion, setReadingStartTime])
 
+  const handleSkip = useCallback(() => {
+    if (completionRef.current) return
+    if (condition === 'text') return // Skip only for video and audio
+    
+    // Clear the timer
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    
+    // Set reading duration to 0 for skipped media
+    if (setReadingStartTime) {
+      setReadingStartTime(0)
+    }
+    
+    triggerCompletion()
+  }, [condition, triggerCompletion, setReadingStartTime])
+
   useEffect(() => {
     if (!hydrated) return
     if (!isSessionActive) {
@@ -172,9 +190,17 @@ export function MediaScreen() {
             </Button>
           </div>
         ) : (
-          <div className="rounded-3xl border border-neutral-200 bg-white/80 p-5 text-sm text-neutral-600 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/70 dark:text-neutral-300">
-            <p>{messages.media.stalledMessage}</p>
-            {playbackError && <p className="mt-2 text-rose-600 dark:text-rose-400">{messages.media.errorMessage}</p>}
+          <div className="space-y-4">
+            <div className="rounded-3xl border border-neutral-200 bg-white/80 p-5 text-sm text-neutral-600 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/70 dark:text-neutral-300">
+              <p>{messages.media.stalledMessage}</p>
+              {playbackError && <p className="mt-2 text-rose-600 dark:text-rose-400">{messages.media.errorMessage}</p>}
+            </div>
+            <div className="flex flex-col items-center gap-4 rounded-3xl border border-neutral-200 bg-white/80 p-6 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/70">
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">{messages.media.skipMessage}</p>
+              <Button size="lg" variant="secondary" onClick={handleSkip}>
+                {messages.media.skipButton}
+              </Button>
+            </div>
           </div>
         )}
       </motion.main>

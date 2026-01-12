@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Fragment, useMemo } from 'react'
 import { useSettings } from '../context/SettingsContext'
 import { MEDIA_DURATION_SECONDS } from '../data/mediaContent'
-import { resultsToCsv } from '../lib/csv'
+import { resultsToCsv, resultsToFullCsv } from '../lib/csv'
 import type { ConditionResult } from '../types'
 import { Button } from './shared/Button'
 
@@ -12,6 +12,15 @@ interface ResultExportProps {
   participantId: string
   participantName?: string
   consentSignedAt?: string
+  demographicData?: {
+    age?: number
+    shortVideosFrequency?: string
+    audioFrequency?: string
+    textFrequency?: string
+    caffeineConsumed?: boolean
+    caffeineTimeAgo?: string
+    alertness?: number
+  }
   onReset: () => void
 }
 
@@ -33,15 +42,32 @@ export function ResultExport({
   participantId,
   participantName,
   consentSignedAt,
+  demographicData,
   onReset,
 }: ResultExportProps) {
   const { messages } = useSettings()
-  const csvContent = useMemo(() => resultsToCsv(results), [results])
+  const csvContent = useMemo(
+    () =>
+      resultsToFullCsv({
+        results,
+        participantId,
+        participantName,
+        consentSignedAt,
+        demographicData,
+      }),
+    [results, participantId, participantName, consentSignedAt, demographicData],
+  )
 
   const meanError = useMemo(() => {
     if (!results.length) return 0
     const totalError = results.reduce((acc, result) => acc + (result.estimatedTimeSec - result.realDurationSec), 0)
     return totalError / results.length
+  }, [results])
+
+  const averageActualDuration = useMemo(() => {
+    if (!results.length) return 0
+    const totalDuration = results.reduce((acc, result) => acc + result.realDurationSec, 0)
+    return totalDuration / results.length
   }, [results])
 
 
@@ -96,7 +122,7 @@ export function ResultExport({
             <p className="text-xs uppercase tracking-[0.32em] text-brand-400 dark:text-brand-200">
               {messages.result.actualDurationLabel}
             </p>
-            <p className="text-xl font-semibold">{formatDuration(MEDIA_DURATION_SECONDS)}</p>
+            <p className="text-xl font-semibold">{formatDuration(averageActualDuration)}</p>
           </div>
         </div>
       </div>
@@ -123,6 +149,7 @@ export function ResultExport({
             <tr>
               <th className="px-4 py-3">{messages.result.table.condition}</th>
               <th className="px-4 py-3">{messages.result.table.estimate}</th>
+              <th className="px-4 py-3">{messages.result.table.actualDuration}</th>
               <th className="px-4 py-3">{messages.result.table.confidence}</th>
               <th className="px-4 py-3">{messages.result.table.engagement}</th>
               <th className="px-4 py-3">{messages.result.table.difference}</th>
@@ -145,6 +172,9 @@ export function ResultExport({
                     </td>
                     <td className="px-4 py-3 font-semibold text-brand-700 dark:text-brand-200">
                       {formatDuration(result.estimatedTimeSec)}
+                    </td>
+                    <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
+                      {formatDuration(result.realDurationSec)}
                     </td>
                     <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">{result.confidence}</td>
                     <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">{overallEngagement.toFixed(1)}</td>

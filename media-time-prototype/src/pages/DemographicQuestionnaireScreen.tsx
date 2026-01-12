@@ -5,7 +5,7 @@ import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import { Button } from '../components/shared/Button'
 import { LoadingOverlay } from '../components/LoadingOverlay'
-import { useSession } from '../context/SessionContext'
+import { useSession, type DemographicData } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
 
 type MediaFrequency = 'very_rarely' | 'rarely' | 'sometimes' | 'often' | 'very_often'
@@ -46,7 +46,7 @@ const alertnessOptions: { value: AlertnessLevel; label: string }[] = [
 
 export function DemographicQuestionnaireScreen() {
   const navigate = useNavigate()
-  const { hydrated, isSessionActive } = useSession()
+  const { hydrated, isSessionActive, setDemographicData } = useSession()
   const { messages, t } = useSettings()
   const [transitioning, setTransitioning] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -112,9 +112,20 @@ export function DemographicQuestionnaireScreen() {
     }
 
     setErrors({})
+    
+    // Store demographic data in session context
+    const demographicData: DemographicData = {
+      age: formData.age as number,
+      shortVideosFrequency: formData.shortVideosFrequency || undefined,
+      audioFrequency: formData.audioFrequency || undefined,
+      textFrequency: formData.textFrequency || undefined,
+      caffeineConsumed: formData.caffeineConsumed ?? undefined,
+      caffeineTimeAgo: formData.caffeineTimeAgo || undefined,
+      alertness: formData.alertness ?? undefined,
+    }
+    setDemographicData(demographicData)
+    
     setTransitioning(true)
-    // Store demographic data in session context if needed
-    // For now, just navigate to instructions
     window.setTimeout(() => {
       navigate('/instructions')
     }, 500)

@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ResultExport } from '../components/ResultExport'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
+import { sendToGoogleSheets, isGoogleSheetsConfigured } from '../lib/googleSheets'
 
 export function SummaryScreen() {
   const navigate = useNavigate()
@@ -15,9 +16,12 @@ export function SummaryScreen() {
     participantName,
     consentSignedAt,
     resetSession,
+    demographicData,
+    orderNumber,
   } =
     useSession()
   const { messages } = useSettings()
+  const [googleSheetsSent, setGoogleSheetsSent] = useState(false)
 
   useEffect(() => {
     if (!hydrated) return
@@ -25,6 +29,29 @@ export function SummaryScreen() {
       navigate('/')
     }
   }, [hydrated, isSessionComplete, navigate])
+
+  // Send data to Google Sheets automatically when screen loads
+  useEffect(() => {
+    if (!hydrated || !isSessionComplete || !results.length || googleSheetsSent) return
+    if (!isGoogleSheetsConfigured()) return
+
+    const sendData = async () => {
+      const success = await sendToGoogleSheets({
+        participantId,
+        participantName,
+        consentSignedAt,
+        orderNumber,
+        ...demographicData,
+        results,
+      })
+      if (success) {
+        setGoogleSheetsSent(true)
+        console.log('Data sent to Google Sheets successfully')
+      }
+    }
+
+    sendData()
+  }, [hydrated, isSessionComplete, results, participantId, participantName, consentSignedAt, demographicData, googleSheetsSent])
 
   const handleReset = () => {
     resetSession()
@@ -67,6 +94,7 @@ export function SummaryScreen() {
             participantId={participantId}
             participantName={participantName}
             consentSignedAt={consentSignedAt}
+            demographicData={demographicData}
             onReset={handleReset}
           />
         </div>

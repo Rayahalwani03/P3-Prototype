@@ -62,8 +62,11 @@ type TranslationTree = {
     audioInnerLabel: string
     conditionLabels: Record<'video' | 'audio' | 'text', string>
     textContinueMessage: string
-    textContinueButton: string
-  }
+      textContinueButton: string
+      skipMessage: string
+      skipButton: string
+      playButton: string
+    }
   questionnaireScreen: {
     badge: string
     title: string
@@ -192,6 +195,7 @@ type TranslationTree = {
     table: {
       condition: string
       estimate: string
+      actualDuration: string
       confidence: string
       engagement: string
       difference: string
@@ -303,6 +307,9 @@ export const translations: Record<Language, TranslationTree> = {
       },
       textContinueMessage: 'Take your time to read the article at your own pace. When you have finished reading, click the button below to continue.',
       textContinueButton: 'I have finished reading',
+      skipMessage: 'If you wish to skip this media and proceed to the questionnaire, you can do so using the button below.',
+      skipButton: 'Skip to Questionnaire',
+      playButton: '▶ Play',
     },
     questionnaireScreen: {
       badge: 'Post-condition survey',
@@ -450,6 +457,7 @@ export const translations: Record<Language, TranslationTree> = {
       table: {
         condition: 'Condition',
         estimate: 'Estimate (mm:ss)',
+        actualDuration: 'Actual (mm:ss)',
         confidence: 'Confidence',
         engagement: 'Engagement',
         difference: 'Difference',
@@ -563,6 +571,9 @@ export const translations: Record<Language, TranslationTree> = {
       },
       textContinueMessage: 'Nehmen Sie sich Zeit, den Artikel in Ihrem eigenen Tempo zu lesen. Wenn Sie fertig sind, klicken Sie auf die Schaltfläche unten, um fortzufahren.',
       textContinueButton: 'Ich habe fertig gelesen',
+      skipMessage: 'Wenn Sie dieses Medium überspringen und zum Fragebogen übergehen möchten, können Sie dies mit der Schaltfläche unten tun.',
+      skipButton: 'Zum Fragebogen überspringen',
+      playButton: '▶ Abspielen',
     },
     questionnaireScreen: {
       badge: 'Fragebogen nach der Bedingung',
@@ -710,6 +721,7 @@ export const translations: Record<Language, TranslationTree> = {
       table: {
         condition: 'Bedingung',
         estimate: 'Schätzung (mm:ss)',
+        actualDuration: 'Tatsächlich (mm:ss)',
         confidence: 'Sicherheit',
         engagement: 'Engagement',
         difference: 'Abweichung',

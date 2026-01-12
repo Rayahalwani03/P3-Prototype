@@ -9,11 +9,22 @@ import {
 } from 'react'
 import type { MediaMeta } from '../data/mediaContent'
 import { MEDIA_CONTENT, MEDIA_DURATION_SECONDS, MEDIA_SEQUENCE } from '../data/mediaContent'
-import { shuffle } from '../lib/array'
+import { getLatinSquareOrder, getOrderNumber } from '../lib/latinSquare'
 import { clearStorage, readFromStorage, writeToStorage } from '../lib/storage'
 import type { ConditionResult, MediaCondition } from '../types'
 
 const STORAGE_KEY = 'mtp_session_state_v1'
+const PARTICIPANT_COUNTER_KEY = 'mtp_participant_counter_v1'
+
+export interface DemographicData {
+  age?: number
+  shortVideosFrequency?: string
+  audioFrequency?: string
+  textFrequency?: string
+  caffeineConsumed?: boolean
+  caffeineTimeAgo?: string
+  alertness?: number
+}
 
 interface SessionState {
   participantId: string
@@ -22,10 +33,12 @@ interface SessionState {
   consentSignatureDataUrl?: string
   consentSignedAt?: string
   conditionOrder: MediaCondition[]
+  orderNumber?: number // Latin-square order number (1-6)
   currentIndex: number
   results: ConditionResult[]
   startedAt?: string
   readingDurationSec?: number
+  demographicData?: DemographicData
 }
 
 interface StartSessionPayload {
@@ -55,6 +68,9 @@ interface SessionContextValue {
   getConditionByIndex: (index: number) => MediaCondition | null
   getMediaMeta: (condition: MediaCondition) => MediaMeta
   setReadingStartTime: (durationSec: number) => void
+  setDemographicData: (data: DemographicData) => void
+  demographicData?: DemographicData
+  orderNumber?: number
 }
 
 const defaultState: SessionState = {
@@ -103,14 +119,23 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const startSession = useCallback(
     ({ participantId, participantName, consentSignedAt, consentSignatureDataUrl }: StartSessionPayload) => {
-      const randomizedOrder = shuffle(MEDIA_SEQUENCE)
+      // Get or increment participant counter for Latin-square
+      let participantCounter = readFromStorage<number>(PARTICIPANT_COUNTER_KEY) || 0
+      participantCounter += 1
+      writeToStorage(PARTICIPANT_COUNTER_KEY, participantCounter)
+      
+      // Get condition order using Latin-square method
+      const conditionOrder = getLatinSquareOrder(participantCounter)
+      const orderNumber = getOrderNumber(participantCounter)
+      
       const newState: SessionState = {
         participantId,
         consentGiven: true,
         participantName,
         consentSignedAt,
         consentSignatureDataUrl,
-        conditionOrder: randomizedOrder,
+        conditionOrder,
+        orderNumber,
         currentIndex: 0,
         results: [],
         startedAt: new Date().toISOString(),
@@ -148,6 +173,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const setReadingStartTime = useCallback((durationSec: number) => {
     setState((prev) => ({ ...prev, readingDurationSec: durationSec }))
+  }, [])
+
+  const setDemographicData = useCallback((data: DemographicData) => {
+    setState((prev) => ({ ...prev, demographicData: data }))
   }, [])
 
   const markConsent = useCallback((value: boolean) => {
@@ -194,6 +223,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     getConditionByIndex,
     getMediaMeta,
     setReadingStartTime,
+    setDemographicData,
+    demographicData: state.demographicData,
+    orderNumber: state.orderNumber,
   }
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
