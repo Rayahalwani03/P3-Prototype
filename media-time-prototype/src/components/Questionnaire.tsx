@@ -1,10 +1,42 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
-import { RadioGroup } from '@headlessui/react'
+import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import { Button } from './shared/Button'
 import type { LikertScale } from '../types'
 import { useSettings } from '../context/SettingsContext'
+
+// Wrapper component to ensure RadioGroup is always controlled
+// Uses a sentinel value to prevent uncontrolled/controlled warnings
+function ControlledRadioGroup<T extends string | number>({
+  value,
+  onChange,
+  children,
+  className,
+}: {
+  value: T | null | undefined
+  onChange: (value: T) => void
+  children: React.ReactNode
+  className?: string
+}) {
+  // Use a sentinel value that won't match any real option
+  // This ensures the component is always controlled
+  const SENTINEL = '__UNSELECTED__' as T
+  const controlledValue = value ?? SENTINEL
+
+  const handleChange = (newValue: T) => {
+    // Only call onChange if a real value was selected
+    if (newValue !== SENTINEL) {
+      onChange(newValue)
+    }
+  }
+
+  return (
+    <HeadlessRadioGroup value={controlledValue} onChange={handleChange} className={className}>
+      {children}
+    </HeadlessRadioGroup>
+  )
+}
 
 export interface QuestionnaireSubmitPayload {
   estimatedTimeSec: number
@@ -309,13 +341,13 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
             <span>{t('questionnaire.likert.confidence.right')}</span>
           </div>
         </div>
-        <RadioGroup
-          value={values.confidence ?? undefined}
+        <ControlledRadioGroup
+          value={values.confidence}
           onChange={(value: LikertScale) => setValues((prev) => ({ ...prev, confidence: value }))}
           className="grid grid-cols-5 gap-2"
         >
           {likertScaleValues.map((option) => (
-            <RadioGroup.Option key={option} value={option}>
+            <HeadlessRadioGroup.Option key={option} value={option}>
               {({ checked }) => (
                 <button
                   type="button"
@@ -329,9 +361,9 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                   <span className="text-sm font-semibold">{option}</span>
                 </button>
               )}
-            </RadioGroup.Option>
+            </HeadlessRadioGroup.Option>
           ))}
-        </RadioGroup>
+        </ControlledRadioGroup>
         {errors.confidence && <p className="text-xs text-red-500 dark:text-red-400">{errors.confidence}</p>}
       </div>
 
@@ -357,15 +389,15 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                   <span>{t(question.rightKey)}</span>
                 </div>
               </div>
-              <RadioGroup
-                value={values[question.id] ?? undefined}
+              <ControlledRadioGroup
+                value={values[question.id]}
                 onChange={(value: LikertScale) =>
                   setValues((prev) => ({ ...prev, [question.id]: value }))
                 }
                 className="grid grid-cols-5 gap-2"
               >
                 {likertScaleValues.map((option) => (
-                  <RadioGroup.Option key={option} value={option}>
+                  <HeadlessRadioGroup.Option key={option} value={option}>
                     {({ checked }) => (
                       <button
                         type="button"
@@ -379,9 +411,9 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                         <span className="text-sm font-semibold">{option}</span>
                       </button>
                     )}
-                  </RadioGroup.Option>
+                  </HeadlessRadioGroup.Option>
                 ))}
-              </RadioGroup>
+              </ControlledRadioGroup>
               {errors[question.id] && (
                 <p className="text-xs text-red-500 dark:text-red-400">{errors[question.id]}</p>
               )}
@@ -403,15 +435,15 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                   <span>{t(question.rightKey)}</span>
                 </div>
               </div>
-              <RadioGroup
-                value={values[question.id] ?? undefined}
+              <ControlledRadioGroup
+                value={values[question.id]}
                 onChange={(value: LikertScale) =>
                   setValues((prev) => ({ ...prev, [question.id]: value }))
                 }
                 className="grid grid-cols-5 gap-2"
               >
                 {likertScaleValues.map((option) => (
-                  <RadioGroup.Option key={option} value={option}>
+                  <HeadlessRadioGroup.Option key={option} value={option}>
                     {({ checked }) => (
                       <button
                         type="button"
@@ -425,9 +457,9 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                         <span className="text-sm font-semibold">{option}</span>
                       </button>
                     )}
-                  </RadioGroup.Option>
+                  </HeadlessRadioGroup.Option>
                 ))}
-              </RadioGroup>
+              </ControlledRadioGroup>
               {errors[question.id] && (
                 <p className="text-xs text-red-500 dark:text-red-400">{errors[question.id]}</p>
               )}
@@ -450,13 +482,13 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                 <span>{t('questionnaire.likert.familiarity.right')}</span>
               </div>
             </div>
-            <RadioGroup
-              value={values.familiarity ?? undefined}
+            <ControlledRadioGroup
+              value={values.familiarity}
               onChange={(value: LikertScale) => setValues((prev) => ({ ...prev, familiarity: value }))}
               className="grid grid-cols-5 gap-2"
             >
               {likertScaleValues.map((option) => (
-                <RadioGroup.Option key={option} value={option}>
+                <HeadlessRadioGroup.Option key={option} value={option}>
                   {({ checked }) => (
                     <button
                       type="button"
@@ -470,9 +502,9 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                       <span className="text-sm font-semibold">{option}</span>
                     </button>
                   )}
-                </RadioGroup.Option>
+                </HeadlessRadioGroup.Option>
               ))}
-            </RadioGroup>
+            </ControlledRadioGroup>
             {errors.familiarity && (
               <p className="text-xs text-red-500 dark:text-red-400">{errors.familiarity}</p>
             )}
