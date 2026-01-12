@@ -30,18 +30,18 @@ interface QuestionnaireProps {
 interface QuestionnaireFormValues {
   estimatedMinutes: number | ''
   estimatedSeconds: number | ''
-  confidence: LikertScale | undefined
-  immersion1: LikertScale | undefined
-  immersion2: LikertScale | undefined
-  immersion3: LikertScale | undefined
-  immersion4: LikertScale | undefined
-  immersion5: LikertScale | undefined
-  engagement1: LikertScale | undefined
-  engagement2: LikertScale | undefined
-  engagement3: LikertScale | undefined
-  engagement4: LikertScale | undefined
-  engagement5: LikertScale | undefined
-  familiarity: LikertScale | undefined
+  confidence: LikertScale | null
+  immersion1: LikertScale | null
+  immersion2: LikertScale | null
+  immersion3: LikertScale | null
+  immersion4: LikertScale | null
+  immersion5: LikertScale | null
+  engagement1: LikertScale | null
+  engagement2: LikertScale | null
+  engagement3: LikertScale | null
+  engagement4: LikertScale | null
+  engagement5: LikertScale | null
+  familiarity: LikertScale | null
 }
 
 type LikertQuestionId = Exclude<keyof QuestionnaireSubmitPayload, 'estimatedTimeSec'>
@@ -142,18 +142,18 @@ const allQuestions: LikertQuestion[] = [
 const initialValues: QuestionnaireFormValues = {
   estimatedMinutes: '',
   estimatedSeconds: '',
-  confidence: undefined,
-  immersion1: undefined,
-  immersion2: undefined,
-  immersion3: undefined,
-  immersion4: undefined,
-  immersion5: undefined,
-  engagement1: undefined,
-  engagement2: undefined,
-  engagement3: undefined,
-  engagement4: undefined,
-  engagement5: undefined,
-  familiarity: undefined,
+  confidence: null,
+  immersion1: null,
+  immersion2: null,
+  immersion3: null,
+  immersion4: null,
+  immersion5: null,
+  engagement1: null,
+  engagement2: null,
+  engagement3: null,
+  engagement4: null,
+  engagement5: null,
+  familiarity: null,
 }
 
 function parsePositiveInt(value: number | ''): number {
@@ -310,7 +310,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
           </div>
         </div>
         <RadioGroup
-          value={values.confidence}
+          value={values.confidence ?? undefined}
           onChange={(value: LikertScale) => setValues((prev) => ({ ...prev, confidence: value }))}
           className="grid grid-cols-5 gap-2"
         >
@@ -358,7 +358,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                 </div>
               </div>
               <RadioGroup
-                value={values[question.id]}
+                value={values[question.id] ?? undefined}
                 onChange={(value: LikertScale) =>
                   setValues((prev) => ({ ...prev, [question.id]: value }))
                 }
@@ -404,7 +404,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                 </div>
               </div>
               <RadioGroup
-                value={values[question.id]}
+                value={values[question.id] ?? undefined}
                 onChange={(value: LikertScale) =>
                   setValues((prev) => ({ ...prev, [question.id]: value }))
                 }
@@ -451,7 +451,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
               </div>
             </div>
             <RadioGroup
-              value={values.familiarity}
+              value={values.familiarity ?? undefined}
               onChange={(value: LikertScale) => setValues((prev) => ({ ...prev, familiarity: value }))}
               className="grid grid-cols-5 gap-2"
             >
