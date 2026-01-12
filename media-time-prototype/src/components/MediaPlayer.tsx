@@ -35,17 +35,24 @@ export function MediaPlayer({ condition, playing, onReady, onError }: MediaPlaye
 
   const handleUserInteraction = async () => {
     setUserInteracted(true)
+    // Small delay to ensure state is updated
+    await new Promise(resolve => setTimeout(resolve, 50))
+    
     if (condition === 'video' && videoRef.current) {
       try {
         videoRef.current.muted = false
-        await videoRef.current.play()
+        if (playing) {
+          await videoRef.current.play()
+        }
       } catch (error) {
         handlePlayerError(error)
       }
     } else if (condition === 'audio' && audioRef.current) {
       try {
         audioRef.current.muted = false
-        await audioRef.current.play()
+        if (playing) {
+          await audioRef.current.play()
+        }
       } catch (error) {
         handlePlayerError(error)
       }
@@ -63,14 +70,14 @@ export function MediaPlayer({ condition, playing, onReady, onError }: MediaPlaye
   }, [condition])
 
   useEffect(() => {
-    if (condition === 'video' && videoRef.current) {
-      if (playing && userInteracted) {
+    if (condition === 'video' && videoRef.current && userInteracted) {
+      if (playing) {
         videoRef.current.play().catch(handlePlayerError)
       } else {
         videoRef.current.pause()
       }
-    } else if (condition === 'audio' && audioRef.current) {
-      if (playing && userInteracted) {
+    } else if (condition === 'audio' && audioRef.current && userInteracted) {
+      if (playing) {
         audioRef.current.play().catch(handlePlayerError)
       } else {
         audioRef.current.pause()

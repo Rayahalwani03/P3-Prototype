@@ -33,9 +33,19 @@ export function SummaryScreen() {
   // Send data to Google Sheets automatically when screen loads
   useEffect(() => {
     if (!hydrated || !isSessionComplete || !results.length || googleSheetsSent) return
-    if (!isGoogleSheetsConfigured()) return
+    
+    if (!isGoogleSheetsConfigured()) {
+      console.warn('Google Sheets not configured. Set VITE_GOOGLE_SHEETS_WEB_APP_URL in .env file')
+      return
+    }
 
     const sendData = async () => {
+      console.log('Sending data to Google Sheets...', {
+        participantId,
+        resultsCount: results.length,
+        hasDemographics: !!demographicData,
+      })
+      
       const success = await sendToGoogleSheets({
         participantId,
         participantName,
@@ -44,14 +54,17 @@ export function SummaryScreen() {
         ...demographicData,
         results,
       })
+      
       if (success) {
         setGoogleSheetsSent(true)
-        console.log('Data sent to Google Sheets successfully')
+        console.log('✅ Data sent to Google Sheets successfully')
+      } else {
+        console.error('❌ Failed to send data to Google Sheets')
       }
     }
 
     sendData()
-  }, [hydrated, isSessionComplete, results, participantId, participantName, consentSignedAt, demographicData, googleSheetsSent])
+  }, [hydrated, isSessionComplete, results, participantId, participantName, consentSignedAt, demographicData, orderNumber, googleSheetsSent])
 
   const handleReset = () => {
     resetSession()

@@ -29,9 +29,11 @@ export interface ParticipantData {
  */
 export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean> {
   if (!GOOGLE_SHEETS_WEB_APP_URL) {
-    console.warn('Google Sheets Web App URL not configured. Data will not be sent.')
+    console.warn('⚠️ Google Sheets Web App URL not configured. Set VITE_GOOGLE_SHEETS_WEB_APP_URL in .env file')
     return false
   }
+  
+  console.log('📤 Sending to Google Sheets:', GOOGLE_SHEETS_WEB_APP_URL)
 
   try {
     // Get full condition order string (e.g., "V-A-T")
