@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Button } from '../components/shared/Button'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { LoadingOverlay } from '../components/LoadingOverlay'
+import { Button } from '../components/shared/Button'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
-import { SignaturePad, type SignaturePadHandle } from '../components/shared/SignaturePad'
 import { generateParticipantId } from '../lib/id'
 
 const containerVariants = {
@@ -32,21 +31,13 @@ export function WelcomeScreen() {
   const [transitioning, setTransitioning] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
-  const [hasSignature, setHasSignature] = useState(false)
-  const signaturePadRef = useRef<SignaturePadHandle | null>(null)
 
   useEffect(() => {
     if (!hydrated) return
     setAssignedId((prev) => (participantId ? participantId : prev))
     setFullName((prev) => (participantName ? participantName : prev))
-      setConsent(consentGiven)
-    if (consentSignatureDataUrl) {
-      requestAnimationFrame(() => {
-        signaturePadRef.current?.loadDataURL(consentSignatureDataUrl)
-        setHasSignature(true)
-      })
-    }
-  }, [hydrated, participantId, participantName, consentGiven, consentSignatureDataUrl])
+    setConsent(consentGiven)
+  }, [hydrated, participantId, participantName, consentGiven])
 
   const handleSubmit = () => {
     if (!fullName.trim()) {
@@ -57,21 +48,11 @@ export function WelcomeScreen() {
       setError(messages.welcome.consentRequired)
       return
     }
-    if (!signaturePadRef.current || signaturePadRef.current.isEmpty()) {
-      setError(messages.welcome.signatureRequired)
-      return
-    }
-    const signatureDataUrl = signaturePadRef.current.getDataURL()
-    if (!signatureDataUrl) {
-      setError(messages.welcome.signatureRequired)
-      return
-    }
     setError(null)
     markConsent(true)
     startSession({
       participantId: assignedId,
       participantName: fullName.trim(),
-      consentSignatureDataUrl: signatureDataUrl,
       consentSignedAt: new Date().toISOString(),
     })
     setTransitioning(true)
@@ -101,12 +82,6 @@ export function WelcomeScreen() {
     }
   }
 
-  const handleClearSignature = () => {
-    signaturePadRef.current?.clear()
-    setHasSignature(false)
-    setError(null)
-  }
-
   const handleConsentToggle = (checked: boolean) => {
     setConsent(checked)
     markConsent(checked)
@@ -133,6 +108,17 @@ export function WelcomeScreen() {
             {messages.welcome.title}
           </h1>
           <p className="text-neutral-600 dark:text-neutral-300">{messages.welcome.description}</p>
+        </div>
+
+        <div className="space-y-4 rounded-2xl border border-neutral-200 bg-white/90 p-5 dark:border-neutral-700 dark:bg-neutral-900/70">
+          <h2 className="font-display text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+            {messages.welcome.importantInstructionsHeading}
+          </h2>
+          <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 dark:text-neutral-300">
+            {messages.welcome.importantInstructions.map((instruction: string, index: number) => (
+              <li key={index}>{instruction}</li>
+            ))}
+          </ul>
         </div>
 
         {isSessionActive && (
@@ -208,28 +194,6 @@ export function WelcomeScreen() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <p className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
-                {messages.welcome.signatureLabel}
-              </p>
-              <SignaturePad
-                ref={signaturePadRef}
-                onDraw={() => {
-                  if (!hasSignature) {
-                    setHasSignature(true)
-                  }
-                  if (error) {
-                    setError(null)
-                  }
-                }}
-              />
-              <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-neutral-500 dark:text-neutral-400">
-                <span>{messages.welcome.signatureHelper}</span>
-                <Button type="button" variant="ghost" size="md" onClick={handleClearSignature}>
-                  {messages.welcome.signatureClear}
-                </Button>
-              </div>
-            </div>
           </div>
 
           <label className="flex items-start gap-3 rounded-2xl border border-neutral-200 bg-white/90 p-4 text-sm text-neutral-700 shadow-inner dark:border-neutral-700 dark:bg-neutral-900/70 dark:text-neutral-200">

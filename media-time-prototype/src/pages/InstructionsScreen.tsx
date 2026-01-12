@@ -8,7 +8,7 @@ import { useSettings } from '../context/SettingsContext'
 
 export function InstructionsScreen() {
   const navigate = useNavigate()
-  const { hydrated, isSessionActive, demographicsCompleted } = useSession()
+  const { hydrated, isSessionActive } = useSession()
   const { messages, t } = useSettings()
   const [transitioning, setTransitioning] = useState(false)
 
@@ -16,12 +16,8 @@ export function InstructionsScreen() {
     if (!hydrated) return
     if (!isSessionActive) {
       navigate('/')
-      return
     }
-    if (!demographicsCompleted) {
-      navigate('/demographics')
-    }
-  }, [hydrated, isSessionActive, demographicsCompleted, navigate])
+  }, [hydrated, isSessionActive, navigate])
 
   const handleStart = () => {
     setTransitioning(true)
@@ -49,15 +45,39 @@ export function InstructionsScreen() {
           <p className="text-neutral-600 dark:text-neutral-300">{messages.instructions.intro}</p>
         </header>
 
-        <ol className="list-decimal space-y-4 pl-5 text-neutral-700 dark:text-neutral-200">
-          {messages.instructions.points.map((point, index) => (
-            <li key={index}>{point}</li>
-          ))}
-        </ol>
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+              {messages.instructions.duringHeading}
+            </h2>
+            <ul className="list-disc space-y-2 pl-5 text-neutral-700 dark:text-neutral-200">
+              {messages.instructions.duringPoints.map((point, index) => (
+                <li key={index}>{point}</li>
+              ))}
+            </ul>
+          </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-brand-100 bg-brand-50/60 p-4 text-sm text-brand-700 dark:border-brand-400/40 dark:bg-brand-400/10 dark:text-brand-200">
-          <span className="uppercase tracking-[0.32em]">{messages.instructions.readyLabel}</span>
-          <span>{messages.instructions.checklist}</span>
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+              {messages.instructions.afterHeading}
+            </h2>
+            <ul className="list-disc space-y-2 pl-5 text-neutral-700 dark:text-neutral-200">
+              {messages.instructions.afterPoints.map((point, index) => (
+                <li key={index}>{point}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+              {messages.instructions.importantNotesHeading}
+            </h2>
+            <ul className="list-disc space-y-2 pl-5 text-neutral-700 dark:text-neutral-200">
+              {messages.instructions.importantNotes.map((note, index) => (
+                <li key={index}>{note}</li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="flex justify-end">

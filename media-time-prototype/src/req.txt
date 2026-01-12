@@ -59,7 +59,7 @@ All stimuli convey similar informational content and are presented in English, w
 The order of conditions is counterbalanced automatically by the system to minimize order effects.
 
 Participants
-The study aims to recruit 12 to 15 adult participants from a general population. Participants complete the experiment remotely using their own devices and internet connection and are required to have sufficient proficiency in English to understand the study materials.
+The study aims to recruit adult participants from a general population. While a minimum of 12-15 participants is recommended for initial analysis, the system supports unlimited participants to allow for larger sample sizes and more reliable results. Participants complete the experiment remotely using their own devices and internet connection and are required to have sufficient proficiency in English to understand the study materials.
 Procedure and Phases
 The study proceeds through the following phases within the web-based tool:
 1.	Information and consent: Participants read the study information and provide informed consent digitally.
@@ -95,7 +95,7 @@ o	Content familiarity
 •	Caffeine consumption self-report
 •	Debriefing text
 Timing Tools
-•	External timer (experimenter-operated) for measuring reading duration
+•	Automatic timing system built into the web-based tool for measuring reading duration (no external timer required)
 Apparatus
 •	Participant device (desktop or laptop with web browser)
 •	Stable internet connection
@@ -108,7 +108,6 @@ Preparation required before the study starts:
 • Introductory / participant information text
 • Digital consent form
 • Demographic questionnaire uploaded to the web tool
-• External timer ready for measuring reading duration
 • Media stimuli and questionnaires uploaded to the web tool
 
  Timeline of each task:
@@ -130,7 +129,7 @@ P3	Third media condition + responses	Media stimulus, questionnaires	5
 Wrap-up	Debriefing, Archiving logs, preparing next session	Debriefing text	3
  
 9)   Analysis
-The collected data will include perceived time estimates, questionnaire responses, and externally measured reading durations. For each participant and condition, temporal bias will be calculated as the difference between perceived duration and actual elapsed time. For the video and audio conditions, the actual duration is fixed at three minutes, while for the text condition, the actual duration corresponds to the recorded reading time.
+The collected data will include perceived time estimates, questionnaire responses, and automatically measured reading durations. For each participant and condition, temporal bias will be calculated as the difference between perceived duration and actual elapsed time. For the video and audio conditions, the actual duration is fixed at three minutes, while for the text condition, the actual duration corresponds to the automatically recorded reading time measured by the system.
 Descriptive statistics will first be computed for all dependent variables, including perceived duration, temporal bias, and immersion and engagement measures. Data will be inspected for completeness and potential outliers before inferential analysis.
 To address RQ1, a within-subjects analysis of variance (ANOVA) will be conducted to test whether perceived duration and temporal bias differ significantly across the three media modalities (video, audio, and text). Where significant effects are found, pairwise comparisons will be used to identify differences between specific media types.
 To address RQ2, a within-subjects ANOVA will be performed on immersion and engagement scores to examine differences across media modalities.

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { MediaPlayer } from '../components/MediaPlayer'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { LoadingOverlay } from '../components/LoadingOverlay'
+import { MediaPlayer } from '../components/MediaPlayer'
 import { Button } from '../components/shared/Button'
-import { MEDIA_DURATION_SECONDS } from '../data/mediaContent'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
+import { MEDIA_DURATION_SECONDS } from '../data/mediaContent'
 
 export function MediaScreen() {
   const navigate = useNavigate()
@@ -19,7 +19,7 @@ export function MediaScreen() {
     getConditionByIndex,
     isSessionComplete,
     participantId,
-    startTextReading,
+    setReadingStartTime,
   } = useSession()
   const { t, messages } = useSettings()
   const numericIndex = Number(index ?? 0)
@@ -29,29 +29,32 @@ export function MediaScreen() {
   const [playbackError, setPlaybackError] = useState(false)
   const completionRef = useRef(false)
   const timerRef = useRef<number | null>(null)
-  const textStartTimeRef = useRef<string | null>(null)
-
-  const isTextCondition = condition === 'text'
+  const readingStartTimeRef = useRef<number | null>(null)
 
   const triggerCompletion = useCallback(() => {
     if (completionRef.current) return
     completionRef.current = true
     setPlaying(false)
     setTransitioning(true)
-
-    // Calculate reading duration for text condition
-    if (isTextCondition && textStartTimeRef.current) {
-      const startTime = new Date(textStartTimeRef.current).getTime()
-      const endTime = Date.now()
-      const durationSec = Math.round((endTime - startTime) / 1000)
-      // Store duration in sessionStorage for questionnaire to use
-      sessionStorage.setItem('textReadingDuration', String(durationSec))
-    }
-
     window.setTimeout(() => {
       navigate(`/questionnaire/${numericIndex}`)
     }, 400)
-  }, [navigate, numericIndex, isTextCondition])
+  }, [navigate, numericIndex])
+
+  const handleTextContinue = useCallback(() => {
+    if (completionRef.current) return
+    if (condition !== 'text') return
+    
+    const readingDuration = readingStartTimeRef.current 
+      ? Math.round((Date.now() - readingStartTimeRef.current) / 1000)
+      : 0
+    
+    if (setReadingStartTime) {
+      setReadingStartTime(readingDuration)
+    }
+    
+    triggerCompletion()
+  }, [condition, triggerCompletion, setReadingStartTime])
 
   useEffect(() => {
     if (!hydrated) return
@@ -77,20 +80,23 @@ export function MediaScreen() {
     setPlaying(true)
     setPlaybackError(false)
     completionRef.current = false
-
-    if (timerRef.current) {
-      window.clearTimeout(timerRef.current)
-    }
-
-    // For text condition: self-paced, no timer
-    // For video/audio: fixed 3-minute timer
-    if (isTextCondition) {
-      // Start tracking reading time
-      const now = new Date().toISOString()
-      textStartTimeRef.current = now
-      startTextReading()
+    
+    // For text condition, track reading start time and don't set a timer
+    if (condition === 'text') {
+      readingStartTimeRef.current = Date.now()
+      if (setReadingStartTime) {
+        setReadingStartTime(0) // Reset reading time
+      }
+      if (timerRef.current) {
+        window.clearTimeout(timerRef.current)
+        timerRef.current = null
+      }
     } else {
-      textStartTimeRef.current = null
+      // For video and audio, use the fixed duration timer
+      readingStartTimeRef.current = null
+      if (timerRef.current) {
+        window.clearTimeout(timerRef.current)
+      }
       timerRef.current = window.setTimeout(() => {
         triggerCompletion()
       }, MEDIA_DURATION_SECONDS * 1000)
@@ -111,24 +117,12 @@ export function MediaScreen() {
     currentIndex,
     navigate,
     triggerCompletion,
-    isTextCondition,
-    startTextReading,
+    condition,
+    setReadingStartTime,
   ])
 
   const handlePlaybackError = () => {
     setPlaybackError(true)
-  }
-
-  const handleSkip = () => {
-    if (timerRef.current) {
-      window.clearTimeout(timerRef.current)
-      timerRef.current = null
-    }
-    triggerCompletion()
-  }
-
-  const handleDoneReading = () => {
-    triggerCompletion()
   }
 
   useEffect(() => {
@@ -165,31 +159,24 @@ export function MediaScreen() {
               {t('media.conditionProgress', { current: numericIndex + 1, total: conditionOrder.length })}
             </p>
           </div>
-          <div className="flex flex-col items-end gap-3">
-            <p className="max-w-sm text-sm text-neutral-600 dark:text-neutral-300">{messages.media.focusReminder}</p>
-            <Button variant="secondary" onClick={handleSkip} disabled={transitioning}>
-              {messages.media.skipButton}
-            </Button>
-          </div>
+          <p className="max-w-sm text-sm text-neutral-600 dark:text-neutral-300">{messages.media.focusReminder}</p>
         </div>
 
         <MediaPlayer condition={condition} playing={playing} onError={handlePlaybackError} />
 
-        <div className="rounded-3xl border border-neutral-200 bg-white/80 p-5 text-sm text-neutral-600 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/70 dark:text-neutral-300">
-          {isTextCondition ? (
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-              <p>{messages.media.textReadingNote}</p>
-              <Button variant="primary" size="lg" onClick={handleDoneReading} disabled={transitioning}>
-                {messages.media.doneReadingButton}
-              </Button>
-            </div>
-          ) : (
-            <>
-              <p>{messages.media.stalledMessage}</p>
-              {playbackError && <p className="mt-2 text-rose-600 dark:text-rose-400">{messages.media.errorMessage}</p>}
-            </>
-          )}
-        </div>
+        {condition === 'text' ? (
+          <div className="flex flex-col items-center gap-4 rounded-3xl border border-neutral-200 bg-white/80 p-6 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/70">
+            <p className="text-sm text-neutral-600 dark:text-neutral-300">{messages.media.textContinueMessage}</p>
+            <Button size="lg" onClick={handleTextContinue}>
+              {messages.media.textContinueButton}
+            </Button>
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-neutral-200 bg-white/80 p-5 text-sm text-neutral-600 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/70 dark:text-neutral-300">
+            <p>{messages.media.stalledMessage}</p>
+            {playbackError && <p className="mt-2 text-rose-600 dark:text-rose-400">{messages.media.errorMessage}</p>}
+          </div>
+        )}
       </motion.main>
     </div>
   )

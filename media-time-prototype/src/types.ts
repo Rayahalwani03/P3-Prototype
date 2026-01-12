@@ -8,33 +8,24 @@ export type LocalizedText = Record<Language, string>
 
 export type LocalizedParagraphs = Record<Language, string[]>
 
-export type MediaUsageFrequency = 'never' | 'rarely' | 'sometimes' | 'often' | 'daily'
-
-export interface Demographics {
-  age: number
-  videoUsage: MediaUsageFrequency
-  podcastUsage: MediaUsageFrequency
-  textUsage: MediaUsageFrequency
-  caffeineToday: boolean
-  caffeineAmount?: string
-}
-
 export interface ConditionResult {
   participantId: string
   condition: MediaCondition
   realDurationSec: number
   estimatedTimeSec: number
   confidence: number
-  absorption: number
-  enjoyment: number
-  attention: number
-  effort: number
-  lostTrackOfTime: number
-  mindWandering: number
-  arousal: number
+  immersion1: number
+  immersion2: number
+  immersion3: number
+  immersion4: number
+  immersion5: number
+  engagement1: number
+  engagement2: number
+  engagement3: number
+  engagement4: number
+  engagement5: number
   familiarity: number
-  qualitativeFeedback: string
   timestamp: string
 }
 
-export type LikertScale = 1 | 2 | 3 | 4 | 5 | 6 | 7
+export type LikertScale = 1 | 2 | 3 | 4 | 5

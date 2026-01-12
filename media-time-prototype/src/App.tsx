@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'framer-motion'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { SettingsBar } from './components/SettingsBar'
-import { DemographicsScreen } from './pages/DemographicsScreen'
+import { DemographicQuestionnaireScreen } from './pages/DemographicQuestionnaireScreen'
 import { InstructionsScreen } from './pages/InstructionsScreen'
 import { MediaScreen } from './pages/MediaScreen'
 import { QuestionnaireScreen } from './pages/QuestionnaireScreen'
@@ -14,7 +14,7 @@ function AnimatedAppRoutes() {
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<WelcomeScreen />} />
-        <Route path="/demographics" element={<DemographicsScreen />} />
+        <Route path="/demographics" element={<DemographicQuestionnaireScreen />} />
         <Route path="/instructions" element={<InstructionsScreen />} />
         <Route path="/media/:index" element={<MediaScreen />} />
         <Route path="/questionnaire/:index" element={<QuestionnaireScreen />} />

@@ -5,7 +5,6 @@ import { LoadingOverlay } from '../components/LoadingOverlay'
 import { Questionnaire, type QuestionnaireSubmitPayload } from '../components/Questionnaire'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
-import { MEDIA_DURATION_SECONDS } from '../data/mediaContent'
 
 export function QuestionnaireScreen() {
   const navigate = useNavigate()
@@ -23,7 +22,6 @@ export function QuestionnaireScreen() {
   const { messages, t } = useSettings()
   const numericIndex = Number(index ?? 0)
   const condition = getConditionByIndex(numericIndex)
-  const isTextCondition = condition === 'text'
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [transitioning, setTransitioning] = useState(false)
 
@@ -62,17 +60,7 @@ export function QuestionnaireScreen() {
     if (!condition) return
     setIsSubmitting(true)
     try {
-      // For text condition, get actual reading duration from sessionStorage
-      let realDuration = MEDIA_DURATION_SECONDS
-      if (isTextCondition) {
-        const storedDuration = sessionStorage.getItem('textReadingDuration')
-        if (storedDuration) {
-          realDuration = parseInt(storedDuration, 10) || MEDIA_DURATION_SECONDS
-          sessionStorage.removeItem('textReadingDuration')
-        }
-      }
-
-      await Promise.resolve(submitResult({ ...values, realDurationSec: realDuration }))
+      await Promise.resolve(submitResult(values))
       setTransitioning(true)
       const nextIndex = numericIndex + 1
       window.setTimeout(() => {
