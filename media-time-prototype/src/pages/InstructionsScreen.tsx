@@ -51,7 +51,7 @@ export function InstructionsScreen() {
               {messages.instructions.duringHeading}
             </h2>
             <ul className="list-disc space-y-2 pl-5 text-neutral-700 dark:text-neutral-200">
-              {messages.instructions.duringPoints.map((point, index) => (
+              {(messages.instructions.duringPoints || []).map((point, index) => (
                 <li key={index}>{point}</li>
               ))}
             </ul>
@@ -62,7 +62,7 @@ export function InstructionsScreen() {
               {messages.instructions.afterHeading}
             </h2>
             <ul className="list-disc space-y-2 pl-5 text-neutral-700 dark:text-neutral-200">
-              {messages.instructions.afterPoints.map((point, index) => (
+              {(messages.instructions.afterPoints || []).map((point, index) => (
                 <li key={index}>{point}</li>
               ))}
             </ul>
@@ -73,7 +73,7 @@ export function InstructionsScreen() {
               {messages.instructions.importantNotesHeading}
             </h2>
             <ul className="list-disc space-y-2 pl-5 text-neutral-700 dark:text-neutral-200">
-              {messages.instructions.importantNotes.map((note, index) => (
+              {(messages.instructions.importantNotes || []).map((note, index) => (
                 <li key={index}>{note}</li>
               ))}
             </ul>

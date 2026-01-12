@@ -5,14 +5,14 @@ import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import { Button } from '../components/shared/Button'
 import { LoadingOverlay } from '../components/LoadingOverlay'
-import { useSession, type DemographicData } from '../context/SessionContext'
+import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
 
 type MediaFrequency = 'very_rarely' | 'rarely' | 'sometimes' | 'often' | 'very_often'
 type CaffeineTime = 'less_than_1_hour' | '1_to_3_hours' | 'more_than_3_hours'
 type AlertnessLevel = 1 | 2 | 3 | 4 | 5
 
-interface DemographicData {
+interface LocalDemographicData {
   age: number | ''
   shortVideosFrequency: MediaFrequency | null
   audioFrequency: MediaFrequency | null
@@ -50,7 +50,7 @@ export function DemographicQuestionnaireScreen() {
   const { messages, t } = useSettings()
   const [transitioning, setTransitioning] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [formData, setFormData] = useState<DemographicData>({
+  const [formData, setFormData] = useState<LocalDemographicData>({
     age: '',
     shortVideosFrequency: null,
     audioFrequency: null,
@@ -114,17 +114,15 @@ export function DemographicQuestionnaireScreen() {
     setErrors({})
     
     // Store demographic data in session context
-    const demographicData: DemographicData = {
+    setDemographicData({
       age: formData.age as number,
-      shortVideosFrequency: formData.shortVideosFrequency || undefined,
-      audioFrequency: formData.audioFrequency || undefined,
-      textFrequency: formData.textFrequency || undefined,
+      shortVideosFrequency: formData.shortVideosFrequency ?? undefined,
+      audioFrequency: formData.audioFrequency ?? undefined,
+      textFrequency: formData.textFrequency ?? undefined,
       caffeineConsumed: formData.caffeineConsumed ?? undefined,
-      caffeineTimeAgo: formData.caffeineTimeAgo || undefined,
+      caffeineTimeAgo: formData.caffeineTimeAgo ?? undefined,
       alertness: formData.alertness ?? undefined,
-    }
-    setDemographicData(demographicData)
-    
+    })
     setTransitioning(true)
     window.setTimeout(() => {
       navigate('/instructions')
@@ -198,8 +196,8 @@ export function DemographicQuestionnaireScreen() {
                   a) {messages.demographics.mediaUsageShortVideos}
                 </label>
                 <RadioGroup
-                  value={formData.shortVideosFrequency}
-                  onChange={(value: MediaFrequency) =>
+                  value={formData.shortVideosFrequency ?? undefined}
+                  onChange={(value: MediaFrequency | null) =>
                     setFormData((prev) => ({ ...prev, shortVideosFrequency: value }))
                   }
                   className="grid grid-cols-5 gap-2"
@@ -232,8 +230,8 @@ export function DemographicQuestionnaireScreen() {
                   b) {messages.demographics.mediaUsageAudio}
                 </label>
                 <RadioGroup
-                  value={formData.audioFrequency}
-                  onChange={(value: MediaFrequency) =>
+                  value={formData.audioFrequency ?? undefined}
+                  onChange={(value: MediaFrequency | null) =>
                     setFormData((prev) => ({ ...prev, audioFrequency: value }))
                   }
                   className="grid grid-cols-5 gap-2"
@@ -266,8 +264,8 @@ export function DemographicQuestionnaireScreen() {
                   c) {messages.demographics.mediaUsageText}
                 </label>
                 <RadioGroup
-                  value={formData.textFrequency}
-                  onChange={(value: MediaFrequency) =>
+                  value={formData.textFrequency ?? undefined}
+                  onChange={(value: MediaFrequency | null) =>
                     setFormData((prev) => ({ ...prev, textFrequency: value }))
                   }
                   className="grid grid-cols-5 gap-2"
@@ -308,8 +306,8 @@ export function DemographicQuestionnaireScreen() {
               </p>
             </div>
             <RadioGroup
-              value={formData.caffeineConsumed}
-              onChange={(value: boolean) =>
+              value={formData.caffeineConsumed ?? undefined}
+              onChange={(value: boolean | null) =>
                 setFormData((prev) => ({
                   ...prev,
                   caffeineConsumed: value,
@@ -359,8 +357,8 @@ export function DemographicQuestionnaireScreen() {
                   {messages.demographics.caffeineFollowUp}
                 </p>
                 <RadioGroup
-                  value={formData.caffeineTimeAgo}
-                  onChange={(value: CaffeineTime) =>
+                  value={formData.caffeineTimeAgo ?? undefined}
+                  onChange={(value: CaffeineTime | null) =>
                     setFormData((prev) => ({ ...prev, caffeineTimeAgo: value }))
                   }
                   className="space-y-2"
@@ -409,8 +407,8 @@ export function DemographicQuestionnaireScreen() {
               </p>
             </div>
             <RadioGroup
-              value={formData.alertness}
-              onChange={(value: AlertnessLevel) => setFormData((prev) => ({ ...prev, alertness: value }))}
+              value={formData.alertness ?? undefined}
+              onChange={(value: AlertnessLevel | null) => setFormData((prev) => ({ ...prev, alertness: value }))}
               className="grid grid-cols-5 gap-2"
             >
               {alertnessOptions.map((option) => (

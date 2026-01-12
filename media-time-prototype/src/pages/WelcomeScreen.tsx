@@ -22,7 +22,6 @@ export function WelcomeScreen() {
     participantName,
     markConsent,
     consentGiven,
-    consentSignatureDataUrl,
   } = useSession()
   const { messages, t } = useSettings()
   const [assignedId, setAssignedId] = useState(() => generateParticipantId())
@@ -115,7 +114,7 @@ export function WelcomeScreen() {
             {messages.welcome.importantInstructionsHeading}
           </h2>
           <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 dark:text-neutral-300">
-            {messages.welcome.importantInstructions.map((instruction: string, index: number) => (
+            {(messages.welcome.importantInstructions || []).map((instruction: string, index: number) => (
               <li key={index}>{instruction}</li>
             ))}
           </ul>
