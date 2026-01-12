@@ -29,7 +29,17 @@ export interface ParticipantData {
  */
 export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean> {
   if (!GOOGLE_SHEETS_WEB_APP_URL) {
-    console.warn('⚠️ Google Sheets Web App URL not configured. Set VITE_GOOGLE_SHEETS_WEB_APP_URL in .env file')
+    const isProduction = import.meta.env.PROD
+    const envHint = isProduction 
+      ? 'Vercel Dashboard → Settings → Environment Variables'
+      : '.env file'
+    
+    console.warn('⚠️ Google Sheets Web App URL not configured.')
+    console.warn(`📝 Add VITE_GOOGLE_SHEETS_WEB_APP_URL to ${envHint}`)
+    if (isProduction) {
+      console.warn('   Make sure to add it for Production, Preview, and Development environments')
+      console.warn('   Then redeploy your project')
+    }
     return false
   }
   

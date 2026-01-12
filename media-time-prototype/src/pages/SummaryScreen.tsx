@@ -35,7 +35,13 @@ export function SummaryScreen() {
     if (!hydrated || !isSessionComplete || !results.length || googleSheetsSent) return
     
     if (!isGoogleSheetsConfigured()) {
-      console.warn('Google Sheets not configured. Set VITE_GOOGLE_SHEETS_WEB_APP_URL in .env file')
+      console.warn('⚠️ Google Sheets not configured.')
+      console.warn('📝 To fix this:')
+      console.warn('   1. For local development: Add VITE_GOOGLE_SHEETS_WEB_APP_URL to .env file')
+      console.warn('   2. For Vercel: Go to Dashboard → Settings → Environment Variables')
+      console.warn('      Add VITE_GOOGLE_SHEETS_WEB_APP_URL with your Web App URL')
+      console.warn('      Make sure to add it for Production, Preview, and Development')
+      console.warn('   3. Redeploy after adding environment variables')
       return
     }
 
