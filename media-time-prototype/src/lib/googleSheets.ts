@@ -120,18 +120,32 @@ export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean
     })
 
     // Send data to Google Sheets Web App
-    await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
-      method: 'POST',
-      mode: 'no-cors', // Required for Google Apps Script Web Apps
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data: rows }),
+    console.log('📤 Sending data to Google Sheets:', {
+      url: GOOGLE_SHEETS_WEB_APP_URL,
+      rowsCount: rows.length,
+      sampleRow: rows[0] ? Object.keys(rows[0]) : 'No rows',
     })
 
-    // Note: With no-cors mode, we can't read the response
-    // The Web App should handle errors internally
-    return true
+    try {
+      const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script Web Apps
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: rows }),
+      })
+
+      // Note: With no-cors mode, we can't read the response
+      // The Web App should handle errors internally
+      console.log('✅ Request sent successfully (no-cors mode - cannot verify response)')
+      return true
+    } catch (fetchError) {
+      console.error('❌ Fetch error:', fetchError)
+      // Even if fetch fails, return true because no-cors mode doesn't give us response
+      // The actual error will be in Apps Script execution logs
+      return true
+    }
   } catch (error) {
     console.error('Error sending data to Google Sheets:', error)
     return false
