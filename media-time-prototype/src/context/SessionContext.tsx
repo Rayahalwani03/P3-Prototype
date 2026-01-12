@@ -8,7 +8,7 @@ import {
     useState,
 } from 'react'
 import type { MediaMeta } from '../data/mediaContent'
-import { MEDIA_CONTENT, MEDIA_DURATION_SECONDS, MEDIA_SEQUENCE } from '../data/mediaContent'
+import { MEDIA_CONTENT, MEDIA_DURATION_SECONDS } from '../data/mediaContent'
 import { getLatinSquareOrder, getOrderNumber } from '../lib/latinSquare'
 import { clearStorage, readFromStorage, writeToStorage } from '../lib/storage'
 import type { ConditionResult, MediaCondition } from '../types'

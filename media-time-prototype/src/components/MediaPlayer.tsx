@@ -1,13 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { ReactElement } from 'react'
-import ReactPlayer from 'react-player'
 import { motion } from 'framer-motion'
 import type { MediaCondition } from '../types'
 import { MEDIA_CONTENT } from '../data/mediaContent'
 import { useSettings } from '../context/SettingsContext'
 import { Button } from './shared/Button'
-
-const Player = ReactPlayer as unknown as (props: Record<string, unknown>) => ReactElement
 
 interface MediaPlayerProps {
   condition: MediaCondition

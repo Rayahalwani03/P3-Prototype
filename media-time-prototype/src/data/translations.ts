@@ -23,6 +23,8 @@ type TranslationTree = {
     badge: string
     title: string
     description: string
+    importantInstructionsHeading?: string
+    importantInstructions?: string[]
     resumeWarning: string
     participantLabel: string
     participantPlaceholder: string
@@ -47,9 +49,15 @@ type TranslationTree = {
     badge: string
     title: string
     intro: string
-    points: string[]
-    readyLabel: string
-    checklist: string
+    duringHeading?: string
+    duringPoints?: string[]
+    afterHeading?: string
+    afterPoints?: string[]
+    importantNotesHeading?: string
+    importantNotes?: string[]
+    points?: string[]
+    readyLabel?: string
+    checklist?: string
     startButton: string
   }
   media: {
@@ -117,6 +125,9 @@ type TranslationTree = {
     secondsPlaceholder: string
     minutesAria: string
     secondsAria: string
+    immersionHeading: string
+    engagementHeading: string
+    additionalFactorsHeading: string
     qualitativeHeading: string
     qualitativeDescription: string
     qualitativePlaceholder: string
@@ -134,42 +145,92 @@ type TranslationTree = {
         left: string
         right: string
       }
-      absorption: {
+      immersion1: {
         label: string
         left: string
         right: string
       }
-      enjoyment: {
+      immersion2: {
         label: string
         left: string
         right: string
       }
-      attention: {
+      immersion3: {
         label: string
         left: string
         right: string
       }
-      effort: {
+      immersion4: {
         label: string
         left: string
         right: string
       }
-      lostTrackOfTime: {
+      immersion5: {
         label: string
         left: string
         right: string
       }
-      mindWandering: {
+      engagement1: {
         label: string
         left: string
         right: string
       }
-      arousal: {
+      engagement2: {
+        label: string
+        left: string
+        right: string
+      }
+      engagement3: {
+        label: string
+        left: string
+        right: string
+      }
+      engagement4: {
+        label: string
+        left: string
+        right: string
+      }
+      engagement5: {
         label: string
         left: string
         right: string
       }
       familiarity: {
+        label: string
+        left: string
+        right: string
+      }
+      absorption?: {
+        label: string
+        left: string
+        right: string
+      }
+      enjoyment?: {
+        label: string
+        left: string
+        right: string
+      }
+      attention?: {
+        label: string
+        left: string
+        right: string
+      }
+      effort?: {
+        label: string
+        left: string
+        right: string
+      }
+      lostTrackOfTime?: {
+        label: string
+        left: string
+        right: string
+      }
+      mindWandering?: {
+        label: string
+        left: string
+        right: string
+      }
+      arousal?: {
         label: string
         left: string
         right: string
@@ -180,6 +241,11 @@ type TranslationTree = {
     badge: string
     title: string
     subtitle: string
+    debriefingParagraph1: string
+    debriefingParagraph2: string
+    debriefingParagraph3: string
+    debriefingParagraph4: string
+    debriefingParagraph5: string
     participantLabel: string
     meanErrorLabel: string
     actualDurationLabel: string
@@ -364,11 +430,16 @@ export const translations: Record<Language, TranslationTree> = {
       immersionHeading: 'Immersion',
       engagementHeading: 'Engagement',
       additionalFactorsHeading: 'Additional Factors',
+      qualitativeHeading: 'Additional Feedback',
+      qualitativeDescription: 'Please share any additional thoughts or feedback about your experience.',
+      qualitativePlaceholder: 'Enter your feedback here...',
+      qualitativeHelper: 'This feedback is optional but helps us understand your experience better.',
       submit: 'Submit responses',
       validation: {
         positiveDuration: 'Provide a positive duration before continuing.',
         secondsRange: 'Seconds must be between 0 and 59.',
         required: 'This rating is required.',
+        feedbackRequired: 'Please provide feedback before continuing.',
       },
       likert: {
         confidence: {
@@ -628,11 +699,16 @@ export const translations: Record<Language, TranslationTree> = {
       immersionHeading: 'Vertiefung',
       engagementHeading: 'Engagement',
       additionalFactorsHeading: 'Zusätzliche Faktoren',
+      qualitativeHeading: 'Zusätzliches Feedback',
+      qualitativeDescription: 'Bitte teilen Sie weitere Gedanken oder Feedback zu Ihrer Erfahrung mit.',
+      qualitativePlaceholder: 'Geben Sie Ihr Feedback hier ein...',
+      qualitativeHelper: 'Dieses Feedback ist optional, hilft uns aber, Ihre Erfahrung besser zu verstehen.',
       submit: 'Antworten abschicken',
       validation: {
         positiveDuration: 'Bitte geben Sie vor dem Fortfahren eine positive Dauer an.',
         secondsRange: 'Sekunden müssen zwischen 0 und 59 liegen.',
         required: 'Diese Bewertung ist erforderlich.',
+        feedbackRequired: 'Bitte geben Sie Feedback an, bevor Sie fortfahren.',
       },
       likert: {
         confidence: {

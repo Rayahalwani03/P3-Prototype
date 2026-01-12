@@ -49,7 +49,7 @@ export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean
       : 0
 
     // Prepare data for each condition result
-    const rows = data.results.map((result, index) => {
+    const rows = data.results.map((result) => {
       // Calculate averages
       const immersionMean =
         (result.immersion1 + result.immersion2 + result.immersion3 + result.immersion4 + result.immersion5) / 5
@@ -118,7 +118,7 @@ export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean
     })
 
     // Send data to Google Sheets Web App
-    const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+    await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors', // Required for Google Apps Script Web Apps
       headers: {
