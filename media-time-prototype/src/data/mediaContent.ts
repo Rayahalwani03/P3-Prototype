@@ -1,12 +1,16 @@
 import type { LocalizedParagraphs, LocalizedText, MediaCondition } from '../types'
 
 /**
- * Media files are located in /public/media/
- * - Video: /media/Video.mp4
- * - Audio: /media/virtual-reality-audio.m4a
+ * Media files are located in /public/media/ or hosted on Vercel Blob
+ * - Video: Uses VITE_VIDEO_URL or falls back to /media/Video.mp4
+ * - Audio: Uses VITE_AUDIO_URL or falls back to /media/virtual-reality-audio.m4a
  * - Article: /media/article.txt (content is embedded below)
  */
 export const MEDIA_DURATION_SECONDS = 180
+
+// Get media URLs from environment variables or use local paths as fallback
+const VIDEO_URL = import.meta.env.VITE_VIDEO_URL || '/media/Video.mp4'
+const AUDIO_URL = import.meta.env.VITE_AUDIO_URL || '/media/virtual-reality-audio.m4a'
 
 export interface MediaMeta {
   type: MediaCondition
@@ -39,7 +43,7 @@ export const MEDIA_CONTENT: Record<MediaCondition, MediaMeta> = {
       en: 'Video about virtual reality in gaming and entertainment.',
       de: 'Video über virtuelle Realität in Spielen und Unterhaltung.',
     },
-    url: '/media/Video.mp4',
+    url: VIDEO_URL,
   },
   audio: {
     type: 'audio',
@@ -55,7 +59,7 @@ export const MEDIA_CONTENT: Record<MediaCondition, MediaMeta> = {
       en: 'Audio podcast about virtual reality in gaming and entertainment.',
       de: 'Audio-Podcast über virtuelle Realität in Spielen und Unterhaltung.',
     },
-    url: '/media/virtual-reality-audio.m4a',
+    url: AUDIO_URL,
   },
   text: {
     type: 'text',
