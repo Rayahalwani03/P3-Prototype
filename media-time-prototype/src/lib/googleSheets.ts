@@ -137,7 +137,7 @@ export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean
     })
 
     try {
-      const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+      await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
         method: 'POST',
         mode: 'no-cors', // Required for Google Apps Script Web Apps
         headers: {
