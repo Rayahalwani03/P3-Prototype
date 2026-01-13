@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useSettings } from '../context/SettingsContext'
 import { resultsToFullCsv } from '../lib/csv'
 import type { ConditionResult } from '../types'
@@ -56,6 +56,7 @@ export function ResultExport({
       }),
     [results, participantId, participantName, consentSignedAt, demographicData],
   )
+  const autoDownloadedRef = useRef(false)
 
   const meanError = useMemo(() => {
     if (!results.length) return 0
@@ -70,7 +71,7 @@ export function ResultExport({
   }, [results])
 
 
-  const handleDownload = () => {
+  const downloadCsv = (autoDownload = false) => {
     if (!csvContent) return
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
@@ -82,6 +83,61 @@ export function ResultExport({
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
+    
+    if (autoDownload) {
+      console.log('📥 CSV file downloaded automatically')
+    }
+  }
+
+  const handleDownload = () => {
+    downloadCsv(false)
+  }
+
+  // Auto-download CSV when component mounts (experiment is done)
+  useEffect(() => {
+    if (csvContent && !autoDownloadedRef.current && results.length > 0) {
+      // Small delay to ensure page is fully loaded
+      const timer = setTimeout(() => {
+        downloadCsv(true)
+        autoDownloadedRef.current = true
+        
+        // Optionally upload to GitHub if configured
+        uploadToGitHub()
+      }, 1000)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [csvContent, results.length])
+
+  const uploadToGitHub = async () => {
+    const GITHUB_UPLOAD_ENABLED = import.meta.env.VITE_GITHUB_UPLOAD_ENABLED === 'true'
+    
+    if (!GITHUB_UPLOAD_ENABLED || !csvContent) return
+
+    try {
+      const timestamp = new Date().toISOString().split('T')[0]
+      const filename = `time-perception-${participantId || 'unknown'}-${timestamp}.csv`
+      
+      const response = await fetch('/api/github-upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          csvContent,
+          filename,
+        }),
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ CSV uploaded to GitHub:', result.url)
+      } else {
+        console.warn('⚠️ Failed to upload CSV to GitHub')
+      }
+    } catch (error) {
+      console.warn('⚠️ GitHub upload error:', error)
+    }
   }
 
 
