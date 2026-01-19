@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { ResultExport } from '../components/ResultExport'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
-import { isGoogleSheetsConfigured, sendToGoogleSheets } from '../lib/googleSheets'
 import { exitFullscreen } from '../lib/fullscreen'
+import { isGoogleSheetsConfigured, sendToGoogleSheets } from '../lib/googleSheets'
 
 export function SummaryScreen() {
   const navigate = useNavigate()
