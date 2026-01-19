@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { ScrollToTop } from './components/ScrollToTop'
 import { SettingsBar } from './components/SettingsBar'
 import { DemographicQuestionnaireScreen } from './pages/DemographicQuestionnaireScreen'
 import { InstructionsScreen } from './pages/InstructionsScreen'
@@ -28,6 +29,7 @@ function AnimatedAppRoutes() {
 export default function App() {
   return (
     <div className="min-h-screen bg-neutral-100 text-neutral-900 transition-colors duration-300 dark:bg-neutral-950 dark:text-neutral-100">
+      <ScrollToTop />
       <SettingsBar />
       <AnimatedAppRoutes />
     </div>
