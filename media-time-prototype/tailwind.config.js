@@ -1,7 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
-  content: ['./index.html', './src/**/*.{ts,tsx,js,jsx}'],
+  content: [
+    './index.html',
+    './src/**/*.{ts,tsx,js,jsx}',
+    './src/**/*.{html,js,ts,jsx,tsx}',
+  ],
+  // Ensure all classes are included in production build
+  safelist: [
+    // Responsive classes that might be dynamically generated
+    {
+      pattern: /^(sm|md|lg|xl):(px|py|gap|text|w|h|min-w|max-w)-/,
+    },
+  ],
   theme: {
     extend: {
       colors: {
