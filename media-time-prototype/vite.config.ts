@@ -12,9 +12,4 @@ export default defineConfig({
       },
     },
   },
-  css: {
-    postcss: {
-      plugins: [],
-    },
-  },
 })

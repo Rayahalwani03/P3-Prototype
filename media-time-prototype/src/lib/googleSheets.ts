@@ -29,17 +29,9 @@ export interface ParticipantData {
  */
 export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean> {
   if (!GOOGLE_SHEETS_WEB_APP_URL) {
-    const isProduction = import.meta.env.PROD
-    const envHint = isProduction 
-      ? 'Vercel Dashboard → Settings → Environment Variables'
-      : '.env file'
-    
     console.warn('⚠️ Google Sheets Web App URL not configured.')
-    console.warn(`📝 Add VITE_GOOGLE_SHEETS_WEB_APP_URL to ${envHint}`)
-    if (isProduction) {
-      console.warn('   Make sure to add it for Production, Preview, and Development environments')
-      console.warn('   Then redeploy your project')
-    }
+    console.warn('📝 Add VITE_GOOGLE_SHEETS_WEB_APP_URL to your .env file')
+    console.warn('   Then restart your development server')
     return false
   }
   
@@ -134,7 +126,17 @@ export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean
       url: GOOGLE_SHEETS_WEB_APP_URL,
       rowsCount: rows.length,
       sampleRow: rows[0] ? Object.keys(rows[0]) : 'No rows',
+      firstRowData: rows[0] ? {
+        participantId: rows[0].participantId,
+        condition: rows[0].condition,
+        timestamp: rows[0].timestamp,
+      } : 'No rows',
     })
+
+    // Log the full payload for debugging (first row only to avoid spam)
+    if (rows.length > 0) {
+      console.log('📋 Sample data being sent (first row):', JSON.stringify(rows[0], null, 2))
+    }
 
     try {
       await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
@@ -149,9 +151,18 @@ export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean
       // Note: With no-cors mode, we can't read the response
       // The Web App should handle errors internally
       console.log('✅ Request sent successfully (no-cors mode - cannot verify response)')
+      console.log('💡 To verify data was saved:')
+      console.log('   1. Check your Google Sheet: https://docs.google.com/spreadsheets/d/1yk9HEnwF_70kJKayFHPCh32l08Df7Rp3OSMavmqGNsA/edit')
+      console.log('   2. Check Apps Script execution logs: https://script.google.com/home/executions')
+      console.log('   3. If data is missing, check Apps Script for errors')
       return true
     } catch (fetchError) {
       console.error('❌ Fetch error:', fetchError)
+      console.error('💡 This might indicate:')
+      console.error('   - Network connectivity issue')
+      console.error('   - Google Apps Script URL is incorrect')
+      console.error('   - Google Apps Script is not deployed')
+      console.error('   - CORS configuration issue')
       // Even if fetch fails, return true because no-cors mode doesn't give us response
       // The actual error will be in Apps Script execution logs
       return true
@@ -166,5 +177,12 @@ export async function sendToGoogleSheets(data: ParticipantData): Promise<boolean
  * Checks if Google Sheets integration is configured
  */
 export function isGoogleSheetsConfigured(): boolean {
-  return Boolean(GOOGLE_SHEETS_WEB_APP_URL)
+  const isConfigured = Boolean(GOOGLE_SHEETS_WEB_APP_URL)
+  if (!isConfigured) {
+    console.warn('🔍 Debug: GOOGLE_SHEETS_WEB_APP_URL is empty')
+    console.warn('🔍 Debug: import.meta.env.VITE_GOOGLE_SHEETS_WEB_APP_URL =', import.meta.env.VITE_GOOGLE_SHEETS_WEB_APP_URL)
+  } else {
+    console.log('✅ Google Sheets URL configured:', GOOGLE_SHEETS_WEB_APP_URL.substring(0, 50) + '...')
+  }
+  return isConfigured
 }

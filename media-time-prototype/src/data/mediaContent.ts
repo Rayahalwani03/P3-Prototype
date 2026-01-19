@@ -1,7 +1,7 @@
 import type { LocalizedParagraphs, LocalizedText, MediaCondition } from '../types'
 
 /**
- * Media files are located in /public/media/ or hosted on Vercel Blob
+ * Media files are located in /public/media/
  * - Video: Uses VITE_VIDEO_URL or falls back to /media/Video.mp4
  * - Audio: Uses VITE_AUDIO_URL or falls back to /media/virtual-reality-audio.m4a
  * - Article: /media/article.txt (content is embedded below)

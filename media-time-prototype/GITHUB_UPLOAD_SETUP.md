@@ -22,18 +22,17 @@
 
 1. اذهب إلى GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. انقر "Generate new token (classic)"
-3. أعطِه اسم (مثل: "Vercel CSV Upload")
+3. أعطِه اسم (مثل: "CSV Upload Token")
 4. اختر الصلاحيات:
    - `repo` (Full control of private repositories)
 5. انسخ Token
 
-### الخطوة 2: إضافة Environment Variables في Vercel
+### الخطوة 2: إضافة Environment Variables
 
-1. اذهب إلى Vercel Dashboard → Settings → Environment Variables
+1. أنشئ ملف `.env` في جذر المشروع (إذا لم يكن موجوداً)
 2. أضف:
    - **Name**: `GITHUB_TOKEN`
    - **Value**: Token الذي نسخته
-   - **Environment**: Production, Preview, Development
 
 3. (اختياري) أضف:
    - **Name**: `GITHUB_REPO`
@@ -45,12 +44,11 @@
 
 ### الخطوة 3: تفعيل GitHub Upload
 
-1. في Vercel Environment Variables، أضف:
+1. في ملف `.env`، أضف:
    - **Name**: `VITE_GITHUB_UPLOAD_ENABLED`
    - **Value**: `true`
-   - **Environment**: Production, Preview, Development
 
-2. أعد نشر المشروع
+2. أعد تشغيل خادم التطوير
 
 ### الخطوة 4: إنشاء مجلد data في GitHub
 
@@ -68,7 +66,7 @@ git push origin main
 ⚠️ **GitHub Token حساس**:
 - لا تشاركه أبداً
 - لا تضعه في الكود
-- استخدمه فقط في Vercel Environment Variables
+- استخدمه فقط في ملف `.env` (وتأكد من إضافة `.env` إلى `.gitignore`)
 - إذا تم تسريبه، احذفه فوراً وأنشئ واحد جديد
 
 ## التوصية

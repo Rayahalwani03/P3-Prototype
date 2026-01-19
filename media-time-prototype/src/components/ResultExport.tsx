@@ -69,37 +69,6 @@ export function ResultExport({
     downloadCsv(false)
   }
 
-  const uploadToGitHub = async () => {
-    const GITHUB_UPLOAD_ENABLED = import.meta.env.VITE_GITHUB_UPLOAD_ENABLED === 'true'
-    
-    if (!GITHUB_UPLOAD_ENABLED || !csvContent) return
-
-    try {
-      const timestamp = new Date().toISOString().split('T')[0]
-      const filename = `time-perception-${participantId || 'unknown'}-${timestamp}.csv`
-      
-      const response = await fetch('/api/github-upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          csvContent,
-          filename,
-        }),
-      })
-
-      if (response.ok) {
-        const result = await response.json()
-        console.log('✅ CSV uploaded to GitHub:', result.url)
-      } else {
-        console.warn('⚠️ Failed to upload CSV to GitHub')
-      }
-    } catch (error) {
-      console.warn('⚠️ GitHub upload error:', error)
-    }
-  }
-
   // Auto-download CSV when component mounts (experiment is done)
   useEffect(() => {
     if (csvContent && !autoDownloadedRef.current && results.length > 0) {
@@ -107,9 +76,6 @@ export function ResultExport({
       const timer = setTimeout(() => {
         downloadCsv(true)
         autoDownloadedRef.current = true
-        
-        // Optionally upload to GitHub if configured
-        uploadToGitHub()
       }, 1000)
       
       return () => clearTimeout(timer)
