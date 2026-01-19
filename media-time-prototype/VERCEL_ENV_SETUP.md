@@ -97,4 +97,4 @@ Environments: Production, Preview, Development
 ## رابط سريع:
 
 - Vercel Dashboard: https://vercel.com/dashboard
-- Google Sheet: https://docs.google.com/spreadsheets/d/12Zvx0qUvaCqjOEF7FhU-tMdl3Ll9dgqM3RjNQ96jnqs/edit
+- Google Sheet: https://docs.google.com/spreadsheets/d/1yk9HEnwF_70kJKayFHPCh32l08Df7Rp3OSMavmqGNsA/edit

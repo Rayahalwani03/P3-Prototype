@@ -2,7 +2,7 @@
  * Google Apps Script for Media Time Perception Study
  * 
  * Instructions:
- * 1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/12Zvx0qUvaCqjOEF7FhU-tMdl3Ll9dgqM3RjNQ96jnqs/edit
+ * 1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/1yk9HEnwF_70kJKayFHPCh32l08Df7Rp3OSMavmqGNsA/edit
  * 2. Go to Extensions > Apps Script
  * 3. Paste this code
  * 4. Save the project
@@ -25,6 +25,35 @@ function doPost(e) {
     if (!rows || !Array.isArray(rows) || rows.length === 0) {
       return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'No data provided' }))
         .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // Deduplication: Check if data already exists
+    // Create a unique key from ParticipantID + Condition + Timestamp
+    const existingData = sheet.getDataRange().getValues();
+    const existingKeys = new Set();
+    
+    // Skip header row (row 1) and build set of existing keys
+    for (let i = 1; i < existingData.length; i++) {
+      const row = existingData[i];
+      const participantId = row[0] || ''; // ParticipantID column
+      const condition = row[13] || ''; // Condition column
+      const timestamp = row[34] || ''; // Timestamp column
+      const key = `${participantId}_${condition}_${timestamp}`;
+      existingKeys.add(key);
+    }
+    
+    // Filter out duplicates
+    const newRows = rows.filter(row => {
+      const key = `${row.participantId || ''}_${row.condition || ''}_${row.timestamp || ''}`;
+      return !existingKeys.has(key);
+    });
+    
+    if (newRows.length === 0) {
+      return ContentService.createTextOutput(JSON.stringify({ 
+        success: true, 
+        message: 'All rows already exist (duplicates skipped)',
+        rowsAdded: 0 
+      })).setMimeType(ContentService.MimeType.JSON);
     }
     
     // Get or create headers - Optimized for JASP analysis
@@ -85,8 +114,8 @@ function doPost(e) {
       sheet.getRange(headerRow, 1, 1, headers.length).setFontColor('#ffffff');
     }
     
-    // Prepare data rows - matching the new header structure
-    const dataRows = rows.map(row => [
+    // Prepare data rows - matching the new header structure (only new rows)
+    const dataRows = newRows.map(row => [
       // Participant Information
       row.participantId || '',
       row.participantName || '',

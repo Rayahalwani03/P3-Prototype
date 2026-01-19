@@ -4,7 +4,7 @@ This guide will help you set up automatic data export to Google Sheets.
 
 ## Step 1: Create Google Apps Script
 
-1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/12Zvx0qUvaCqjOEF7FhU-tMdl3Ll9dgqM3RjNQ96jnqs/edit
+1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/1yk9HEnwF_70kJKayFHPCh32l08Df7Rp3OSMavmqGNsA/edit
 
 2. Go to **Extensions** > **Apps Script**
 

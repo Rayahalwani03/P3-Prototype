@@ -152,10 +152,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           return prev
         }
         const condition = prev.conditionOrder[Math.min(prev.currentIndex, prev.conditionOrder.length - 1)]
-        // Use reading duration for text condition, fixed duration for video/audio
-        const realDurationSec = condition === 'text' && prev.readingDurationSec 
-          ? prev.readingDurationSec 
-          : MEDIA_DURATION_SECONDS
+        // Use actual recorded duration if available (for text: reading time, for video/audio: playback time)
+        // Otherwise fall back to fixed duration for video/audio, or 0 for text
+        const realDurationSec = prev.readingDurationSec !== undefined
+          ? prev.readingDurationSec
+          : condition === 'text' 
+            ? 0 
+            : MEDIA_DURATION_SECONDS
         const fullResult: ConditionResult = {
           participantId: prev.participantId,
           condition,

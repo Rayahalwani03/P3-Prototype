@@ -263,19 +263,19 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-8 rounded-3xl border border-neutral-200 bg-white/95 p-8 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/80"
+      className="flex flex-col gap-6 sm:gap-8 rounded-2xl sm:rounded-3xl border border-neutral-200 bg-white/95 p-4 sm:p-6 md:p-8 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/80"
     >
       {/* Time Estimation */}
       <div>
-        <h2 className="font-display text-2xl font-semibold text-brand-700 dark:text-brand-300">
+        <h2 className="font-display text-xl sm:text-2xl font-semibold text-brand-700 dark:text-brand-300">
           {messages.questionnaire.timeHeading}
         </h2>
-        <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-300">
+        <p className="mt-1 text-xs sm:text-sm text-neutral-500 dark:text-neutral-300">
           {messages.questionnaire.timeDescription}
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
         <label className="flex flex-col gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-200">
           {messages.questionnaire.minutesLabel}
           <input
@@ -344,7 +344,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
         <ControlledRadioGroup
           value={values.confidence}
           onChange={(value: LikertScale) => setValues((prev) => ({ ...prev, confidence: value }))}
-          className="grid grid-cols-5 gap-2"
+          className="grid grid-cols-5 gap-1.5 sm:gap-2"
         >
           {likertScaleValues.map((option) => (
             <HeadlessRadioGroup.Option key={option} value={option}>
@@ -352,13 +352,13 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                 <button
                   type="button"
                   className={clsx(
-                    'flex h-12 w-full items-center justify-center rounded-2xl border transition',
+                    'flex h-10 sm:h-12 w-full items-center justify-center rounded-xl sm:rounded-2xl border transition',
                     checked
                       ? 'border-brand-500 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-400 dark:bg-brand-400/20 dark:text-brand-200'
                       : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-200 hover:text-brand-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-brand-400 dark:hover:text-brand-200',
                   )}
                 >
-                  <span className="text-sm font-semibold">{option}</span>
+                  <span className="text-xs sm:text-sm font-semibold">{option}</span>
                 </button>
               )}
             </HeadlessRadioGroup.Option>
@@ -368,16 +368,16 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
       </div>
 
       {/* Experience During the Activity */}
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300">
             Please indicate how much you agree or disagree with the following statements.
           </p>
         </div>
 
         {/* Immersion */}
-        <div className="space-y-4">
-          <h2 className="font-display text-xl font-semibold text-brand-700 dark:text-brand-300">
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="font-display text-lg sm:text-xl font-semibold text-brand-700 dark:text-brand-300">
             {messages.questionnaire.immersionHeading}
           </h2>
           {immersionQuestions.map((question) => (
@@ -394,7 +394,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                 onChange={(value: LikertScale) =>
                   setValues((prev) => ({ ...prev, [question.id]: value }))
                 }
-                className="grid grid-cols-5 gap-2"
+                className="grid grid-cols-5 gap-1.5 sm:gap-2"
               >
                 {likertScaleValues.map((option) => (
                   <HeadlessRadioGroup.Option key={option} value={option}>
@@ -402,13 +402,13 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                       <button
                         type="button"
                         className={clsx(
-                          'flex h-12 w-full items-center justify-center rounded-2xl border transition',
+                          'flex h-10 sm:h-12 w-full items-center justify-center rounded-xl sm:rounded-2xl border transition',
                           checked
                             ? 'border-brand-500 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-400 dark:bg-brand-400/20 dark:text-brand-200'
                             : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-200 hover:text-brand-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-brand-400 dark:hover:text-brand-200',
                         )}
                       >
-                        <span className="text-sm font-semibold">{option}</span>
+                        <span className="text-xs sm:text-sm font-semibold">{option}</span>
                       </button>
                     )}
                   </HeadlessRadioGroup.Option>
@@ -422,8 +422,8 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
         </div>
 
         {/* Engagement */}
-        <div className="space-y-4">
-          <h2 className="font-display text-xl font-semibold text-brand-700 dark:text-brand-300">
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="font-display text-lg sm:text-xl font-semibold text-brand-700 dark:text-brand-300">
             {messages.questionnaire.engagementHeading}
           </h2>
           {engagementQuestions.map((question) => (
@@ -440,7 +440,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                 onChange={(value: LikertScale) =>
                   setValues((prev) => ({ ...prev, [question.id]: value }))
                 }
-                className="grid grid-cols-5 gap-2"
+                className="grid grid-cols-5 gap-1.5 sm:gap-2"
               >
                 {likertScaleValues.map((option) => (
                   <HeadlessRadioGroup.Option key={option} value={option}>
@@ -448,13 +448,13 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
                       <button
                         type="button"
                         className={clsx(
-                          'flex h-12 w-full items-center justify-center rounded-2xl border transition',
+                          'flex h-10 sm:h-12 w-full items-center justify-center rounded-xl sm:rounded-2xl border transition',
                           checked
                             ? 'border-brand-500 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-400 dark:bg-brand-400/20 dark:text-brand-200'
                             : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-200 hover:text-brand-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-brand-400 dark:hover:text-brand-200',
                         )}
                       >
-                        <span className="text-sm font-semibold">{option}</span>
+                        <span className="text-xs sm:text-sm font-semibold">{option}</span>
                       </button>
                     )}
                   </HeadlessRadioGroup.Option>
@@ -468,8 +468,8 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
         </div>
 
         {/* Additional Factors - Familiarity */}
-        <div className="space-y-4">
-          <h2 className="font-display text-xl font-semibold text-brand-700 dark:text-brand-300">
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="font-display text-lg sm:text-xl font-semibold text-brand-700 dark:text-brand-300">
             {messages.questionnaire.additionalFactorsHeading}
           </h2>
           <div className="space-y-4">
@@ -513,7 +513,7 @@ export function Questionnaire({ onSubmit, isSubmitting = false }: QuestionnaireP
       </div>
 
       <div className="flex items-center justify-end gap-3">
-        <Button type="submit" size="lg" loading={isSubmitting} disabled={!isValid || isSubmitting}>
+        <Button type="submit" size="lg" loading={isSubmitting} disabled={!isValid || isSubmitting} className="w-full sm:w-auto">
           {messages.questionnaire.submit}
         </Button>
       </div>

@@ -136,3 +136,9 @@ To address RQ2, a within-subjects ANOVA will be performed on immersion and engag
 To address RQ3, correlation analyses will be conducted to assess the relationship between temporal bias and self-reported immersion and engagement measures across conditions. For the text condition, reading duration will be considered when interpreting temporal bias. Confounding variables such as prior familiarity with the content, media consumption habits, fatigue or boredom, and caffeine consumption will be examined descriptively and considered in supplementary analyses if needed.
 All analyses will be conducted using standard statistical software. The chosen analysis methods directly support the evaluation of the stated research questions and hypotheses.
 
+
+1. The website doesnt go full screen so still the clock on the system is visible (last time when you did it the website went full screen)
+2. Also I noticed that when article page is loaded, the timer starts automatically, and there was no instruction before saying that they should start reading, i think last time you said you will have a button to start reading and then the article appears and then participant can read. that idea was nice.
+3. At the last the calculated result is visible for the participant, you shall remove that as well.
+4. also for the podcast and video there is a sentence that is displayed like  "If playback stalls, stay on this screen. The questionnaire will unlock automatically after three minutes." do we need that??
+5. will it be possible for an automatic download of the excel file or the csv file once the participant finishes the experiment??

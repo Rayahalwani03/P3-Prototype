@@ -26,7 +26,7 @@ VITE_GOOGLE_SHEETS_WEB_APP_URL=https://script.google.com/macros/s/...
 ### الخطوة 2: التحقق من Google Apps Script
 
 #### 1. تحقق من أن Script منشور بشكل صحيح:
-1. افتح Google Sheet: https://docs.google.com/spreadsheets/d/12Zvx0qUvaCqjOEF7FhU-tMdl3Ll9dgqM3RjNQ96jnqs/edit
+1. افتح Google Sheet: https://docs.google.com/spreadsheets/d/1yk9HEnwF_70kJKayFHPCh32l08Df7Rp3OSMavmqGNsA/edit
 2. اذهب إلى **Extensions** → **Apps Script**
 3. تحقق من أن الكود موجود
 4. اذهب إلى **Deploy** → **Manage deployments**

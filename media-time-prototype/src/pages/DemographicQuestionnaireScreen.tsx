@@ -134,25 +134,25 @@ export function DemographicQuestionnaireScreen() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-neutral-100 via-white to-neutral-200 px-4 py-16 transition-colors duration-300 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
+    <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-neutral-100 via-white to-neutral-200 px-3 py-8 sm:px-4 sm:py-12 md:px-6 md:py-16 transition-colors duration-300 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
       {transitioning && <LoadingOverlay message={t('loading.loadingInstructions')} />}
       <motion.main
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="w-full max-w-3xl space-y-8 rounded-3xl border border-neutral-200 bg-white/95 p-10 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/80"
+        className="w-full max-w-3xl space-y-6 sm:space-y-8 rounded-2xl sm:rounded-3xl border border-neutral-200 bg-white/95 p-6 sm:p-8 md:p-10 shadow-soft backdrop-blur dark:border-neutral-700 dark:bg-neutral-900/80"
       >
-        <header className="space-y-4">
+        <header className="space-y-3 sm:space-y-4">
           <span className="text-xs uppercase tracking-[0.35em] text-brand-500 dark:text-brand-300">
             {messages.demographics.badge}
           </span>
-          <h1 className="font-display text-4xl font-semibold text-neutral-900 dark:text-neutral-100">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-neutral-900 dark:text-neutral-100">
             {messages.demographics.title}
           </h1>
-          <p className="text-neutral-600 dark:text-neutral-300">{messages.demographics.intro}</p>
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300">{messages.demographics.intro}</p>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           {/* Age */}
           <div className="space-y-2">
             <label htmlFor="age" className="text-base font-medium text-neutral-700 dark:text-neutral-200">
@@ -171,7 +171,7 @@ export function DemographicQuestionnaireScreen() {
                 }))
               }
               className={clsx(
-                'w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3 text-base font-medium text-neutral-800 shadow-sm transition focus:border-brand-400 focus:outline-none focus:ring-4 focus:ring-brand-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100',
+                'w-full rounded-xl sm:rounded-2xl border border-neutral-200 bg-white px-4 sm:px-5 py-3 text-base font-medium text-neutral-800 shadow-sm transition focus:border-brand-400 focus:outline-none focus:ring-4 focus:ring-brand-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100',
                 errors.age && 'border-red-400 focus:ring-red-100 dark:border-red-500',
               )}
               placeholder={messages.demographics.agePlaceholder}
@@ -200,7 +200,7 @@ export function DemographicQuestionnaireScreen() {
                   onChange={(value: MediaFrequency | null) =>
                     setFormData((prev) => ({ ...prev, shortVideosFrequency: value }))
                   }
-                  className="grid grid-cols-5 gap-2"
+                  className="grid grid-cols-5 gap-1.5 sm:gap-2"
                 >
                   {mediaFrequencyOptions.map((option) => (
                     <RadioGroup.Option key={option.value} value={option.value}>
@@ -208,7 +208,7 @@ export function DemographicQuestionnaireScreen() {
                         <button
                           type="button"
                           className={clsx(
-                            'flex h-10 w-full items-center justify-center rounded-xl border text-xs transition',
+                            'flex h-9 sm:h-10 w-full items-center justify-center rounded-lg sm:rounded-xl border text-xs transition',
                             checked
                               ? 'border-brand-500 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-400 dark:bg-brand-400/20 dark:text-brand-200'
                               : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-200 hover:text-brand-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-brand-400 dark:hover:text-brand-200',
@@ -234,7 +234,7 @@ export function DemographicQuestionnaireScreen() {
                   onChange={(value: MediaFrequency | null) =>
                     setFormData((prev) => ({ ...prev, audioFrequency: value }))
                   }
-                  className="grid grid-cols-5 gap-2"
+                  className="grid grid-cols-5 gap-1.5 sm:gap-2"
                 >
                   {mediaFrequencyOptions.map((option) => (
                     <RadioGroup.Option key={option.value} value={option.value}>
@@ -242,7 +242,7 @@ export function DemographicQuestionnaireScreen() {
                         <button
                           type="button"
                           className={clsx(
-                            'flex h-10 w-full items-center justify-center rounded-xl border text-xs transition',
+                            'flex h-9 sm:h-10 w-full items-center justify-center rounded-lg sm:rounded-xl border text-xs transition',
                             checked
                               ? 'border-brand-500 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-400 dark:bg-brand-400/20 dark:text-brand-200'
                               : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-200 hover:text-brand-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-brand-400 dark:hover:text-brand-200',
@@ -268,7 +268,7 @@ export function DemographicQuestionnaireScreen() {
                   onChange={(value: MediaFrequency | null) =>
                     setFormData((prev) => ({ ...prev, textFrequency: value }))
                   }
-                  className="grid grid-cols-5 gap-2"
+                  className="grid grid-cols-5 gap-1.5 sm:gap-2"
                 >
                   {mediaFrequencyOptions.map((option) => (
                     <RadioGroup.Option key={option.value} value={option.value}>
@@ -276,7 +276,7 @@ export function DemographicQuestionnaireScreen() {
                         <button
                           type="button"
                           className={clsx(
-                            'flex h-10 w-full items-center justify-center rounded-xl border text-xs transition',
+                            'flex h-9 sm:h-10 w-full items-center justify-center rounded-lg sm:rounded-xl border text-xs transition',
                             checked
                               ? 'border-brand-500 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-400 dark:bg-brand-400/20 dark:text-brand-200'
                               : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-200 hover:text-brand-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-brand-400 dark:hover:text-brand-200',
@@ -409,7 +409,7 @@ export function DemographicQuestionnaireScreen() {
             <RadioGroup
               value={formData.alertness ?? undefined}
               onChange={(value: AlertnessLevel | null) => setFormData((prev) => ({ ...prev, alertness: value }))}
-              className="grid grid-cols-5 gap-2"
+              className="grid grid-cols-5 gap-1.5 sm:gap-2"
             >
               {alertnessOptions.map((option) => (
                 <RadioGroup.Option key={option.value} value={option.value}>
@@ -417,7 +417,7 @@ export function DemographicQuestionnaireScreen() {
                     <button
                       type="button"
                       className={clsx(
-                        'flex h-12 w-full items-center justify-center rounded-2xl border text-sm font-medium transition',
+                        'flex h-10 sm:h-12 w-full items-center justify-center rounded-xl sm:rounded-2xl border text-xs sm:text-sm font-medium transition',
                         checked
                           ? 'border-brand-500 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-400 dark:bg-brand-400/20 dark:text-brand-200'
                           : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-200 hover:text-brand-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-brand-400 dark:hover:text-brand-200',
@@ -433,7 +433,7 @@ export function DemographicQuestionnaireScreen() {
           </div>
 
           <div className="flex justify-end">
-            <Button type="submit" size="lg" disabled={!isValid()}>
+            <Button type="submit" size="lg" disabled={!isValid()} className="w-full sm:w-auto">
               {messages.demographics.continueButton}
             </Button>
           </div>

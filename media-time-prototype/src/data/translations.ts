@@ -69,12 +69,14 @@ type TranslationTree = {
     audioBadge: string
     audioInnerLabel: string
     conditionLabels: Record<'video' | 'audio' | 'text', string>
+    textStartReadingMessage: string
+    textStartReadingButton: string
     textContinueMessage: string
-      textContinueButton: string
-      skipMessage: string
-      skipButton: string
-      playButton: string
-    }
+    textContinueButton: string
+    skipMessage: string
+    skipButton: string
+    playButton: string
+  }
   questionnaireScreen: {
     badge: string
     title: string
@@ -371,6 +373,8 @@ export const translations: Record<Language, TranslationTree> = {
         audio: 'Podcast',
         text: 'Article',
       },
+      textStartReadingMessage: 'Please click the button below when you are ready to start reading. The article will appear and the timer will begin.',
+      textStartReadingButton: 'Start Reading',
       textContinueMessage: 'Take your time to read the article at your own pace. When you have finished reading, click the button below to continue.',
       textContinueButton: 'I have finished reading',
       skipMessage: 'If you wish to skip this media and proceed to the questionnaire, you can do so using the button below.',
@@ -380,7 +384,7 @@ export const translations: Record<Language, TranslationTree> = {
     questionnaireScreen: {
       badge: 'Post-condition survey',
       title: 'Post-media questionnaire',
-      intro: 'Please answer every item before continuing. Your responses remain local until you export the final CSV.',
+      intro: 'Please answer every item before continuing.',
     },
     demographics: {
       badge: 'Demographic Questions',
@@ -506,13 +510,13 @@ export const translations: Record<Language, TranslationTree> = {
     },
     result: {
       badge: 'Debriefing',
-      title: 'Thank you for taking part in this study.',
-      subtitle: 'The purpose of this experiment was to investigate how people perceive the passage of time when engaging with different types of media, such as video, audio-only content, and written text. Although each activity was similar in overall length, people often experience time differently depending on how engaging or immersive an activity feels.',
-      debriefingParagraph1: 'During the study, you were asked to estimate how long each activity lasted and to report your level of engagement, attention, and immersion. These measures allow us to examine whether subjective time perception differs across media types and whether feelings such as immersion, enjoyment, or mind-wandering are related to over- or under-estimation of time.',
-      debriefingParagraph2: 'Some aspects of the study were described in general terms at the beginning to avoid influencing your responses. This is a common and approved research practice when studying perception and experience.',
-      debriefingParagraph3: 'Your responses will be analyzed anonymously and used only for research purposes. There are no right or wrong answers, and individual responses cannot be used to draw conclusions about any single participant.',
-      debriefingParagraph4: 'If you have any questions about the study or would like further information, please contact the research team using the details provided by the experimenter.',
-      debriefingParagraph5: 'Thank you again for your valuable contribution.',
+      title: 'Thank you for your participation.',
+      subtitle: 'This study investigated how media modality (video, audio, text) influences subjective time perception and its relationship with immersion and engagement.',
+      debriefingParagraph1: 'Your time estimates and self-report measures will be analyzed to examine whether temporal perception varies across media types and whether immersion and engagement predict temporal bias.',
+      debriefingParagraph2: 'Some methodological details were withheld initially to minimize response bias, consistent with standard practices in perception research.',
+      debriefingParagraph3: 'All data will be analyzed anonymously for research purposes only. Individual responses cannot be used to draw conclusions about any single participant.',
+      debriefingParagraph4: 'If you have questions or require further information, please contact the research team using the contact details provided by the experimenter.',
+      debriefingParagraph5: 'Thank you for your contribution to this research.',
       participantLabel: 'Participant ID',
       meanErrorLabel: 'Average signed error',
       actualDurationLabel: 'Actual duration per task',
@@ -640,6 +644,8 @@ export const translations: Record<Language, TranslationTree> = {
         audio: 'Podcast',
         text: 'Artikel',
       },
+      textStartReadingMessage: 'Bitte klicken Sie auf die Schaltfläche unten, wenn Sie bereit sind zu lesen. Der Artikel wird erscheinen und der Timer beginnt.',
+      textStartReadingButton: 'Mit dem Lesen beginnen',
       textContinueMessage: 'Nehmen Sie sich Zeit, den Artikel in Ihrem eigenen Tempo zu lesen. Wenn Sie fertig sind, klicken Sie auf die Schaltfläche unten, um fortzufahren.',
       textContinueButton: 'Ich habe fertig gelesen',
       skipMessage: 'Wenn Sie dieses Medium überspringen und zum Fragebogen übergehen möchten, können Sie dies mit der Schaltfläche unten tun.',
@@ -775,8 +781,8 @@ export const translations: Record<Language, TranslationTree> = {
     },
     result: {
       badge: 'Nachbesprechung',
-      title: 'Vielen Dank, dass Sie an dieser Studie teilgenommen haben.',
-      subtitle: 'Der Zweck dieses Experiments war es, zu untersuchen, wie Menschen die Zeitwahrnehmung wahrnehmen, wenn sie sich mit verschiedenen Arten von Medien beschäftigen, wie Video, nur Audio-Inhalte und geschriebener Text. Obwohl jede Aktivität in der Gesamtlänge ähnlich war, erleben Menschen die Zeit oft unterschiedlich, je nachdem, wie ansprechend oder vertiefend eine Aktivität sich anfühlt.',
+      title: 'Vielen Dank für Ihre Teilnahme.',
+      subtitle: 'Diese Studie untersuchte, wie Medienmodalität (Video, Audio, Text) die subjektive Zeitwahrnehmung und ihre Beziehung zu Immersion und Engagement beeinflusst.',
       debriefingParagraph1: 'Während der Studie wurden Sie gebeten, zu schätzen, wie lange jede Aktivität gedauert hat, und Ihr Maß an Engagement, Aufmerksamkeit und Vertiefung zu berichten. Diese Maße ermöglichen es uns zu untersuchen, ob sich die subjektive Zeitwahrnehmung zwischen Medientypen unterscheidet und ob Gefühle wie Vertiefung, Genuss oder Gedankenabschweifung mit einer Über- oder Unterschätzung der Zeit zusammenhängen.',
       debriefingParagraph2: 'Einige Aspekte der Studie wurden zu Beginn in allgemeinen Begriffen beschrieben, um Ihre Antworten nicht zu beeinflussen. Dies ist eine übliche und genehmigte Forschungspraxis bei der Untersuchung von Wahrnehmung und Erfahrung.',
       debriefingParagraph3: 'Ihre Antworten werden anonym analysiert und nur für Forschungszwecke verwendet. Es gibt keine richtigen oder falschen Antworten, und einzelne Antworten können nicht verwendet werden, um Schlussfolgerungen über einen einzelnen Teilnehmer zu ziehen.',
