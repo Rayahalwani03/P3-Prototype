@@ -7,6 +7,7 @@ import { Button } from '../components/shared/Button'
 import { LoadingOverlay } from '../components/LoadingOverlay'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
+import { requestFullscreen } from '../lib/fullscreen'
 
 type MediaFrequency = 'very_rarely' | 'rarely' | 'sometimes' | 'often' | 'very_often'
 type CaffeineTime = 'less_than_1_hour' | '1_to_3_hours' | 'more_than_3_hours'
@@ -64,7 +65,10 @@ export function DemographicQuestionnaireScreen() {
     if (!hydrated) return
     if (!isSessionActive) {
       navigate('/', { replace: true })
+      return
     }
+    // Request fullscreen when entering demographics screen
+    requestFullscreen()
   }, [hydrated, isSessionActive, navigate])
 
   const isValid = () => {

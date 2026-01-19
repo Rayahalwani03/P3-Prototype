@@ -5,6 +5,7 @@ import { LoadingOverlay } from '../components/LoadingOverlay'
 import { Questionnaire, type QuestionnaireSubmitPayload } from '../components/Questionnaire'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
+import { requestFullscreen } from '../lib/fullscreen'
 
 export function QuestionnaireScreen() {
   const navigate = useNavigate()
@@ -45,7 +46,10 @@ export function QuestionnaireScreen() {
     }
     if (numericIndex !== currentIndex) {
       navigate(`/media/${currentIndex}`, { replace: true })
+      return
     }
+    // Request fullscreen when entering questionnaire screen
+    requestFullscreen()
   }, [
     hydrated,
     isSessionActive,

@@ -7,6 +7,7 @@ import { Button } from '../components/shared/Button'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
 import { MEDIA_DURATION_SECONDS } from '../data/mediaContent'
+import { requestFullscreen } from '../lib/fullscreen'
 
 export function MediaScreen() {
   const navigate = useNavigate()
@@ -214,26 +215,6 @@ export function MediaScreen() {
 
   // Request fullscreen when entering media screen
   useEffect(() => {
-    const requestFullscreen = async () => {
-      try {
-        if (document.documentElement.requestFullscreen) {
-          await document.documentElement.requestFullscreen()
-        } else if ((document.documentElement as any).webkitRequestFullscreen) {
-          // Safari
-          await (document.documentElement as any).webkitRequestFullscreen()
-        } else if ((document.documentElement as any).mozRequestFullScreen) {
-          // Firefox
-          await (document.documentElement as any).mozRequestFullScreen()
-        } else if ((document.documentElement as any).msRequestFullscreen) {
-          // IE/Edge
-          await (document.documentElement as any).msRequestFullscreen()
-        }
-      } catch (error) {
-        // User denied fullscreen or browser doesn't support it
-        console.warn('Fullscreen request failed:', error)
-      }
-    }
-
     if (hydrated && isSessionActive && condition) {
       requestFullscreen()
     }

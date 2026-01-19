@@ -5,6 +5,7 @@ import { Button } from '../components/shared/Button'
 import { LoadingOverlay } from '../components/LoadingOverlay'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
+import { requestFullscreen } from '../lib/fullscreen'
 
 export function InstructionsScreen() {
   const navigate = useNavigate()
@@ -16,7 +17,10 @@ export function InstructionsScreen() {
     if (!hydrated) return
     if (!isSessionActive) {
       navigate('/')
+      return
     }
+    // Request fullscreen when entering instructions screen
+    requestFullscreen()
   }, [hydrated, isSessionActive, navigate])
 
   const handleStart = () => {

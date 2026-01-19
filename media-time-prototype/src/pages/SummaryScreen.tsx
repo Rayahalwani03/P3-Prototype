@@ -5,6 +5,7 @@ import { ResultExport } from '../components/ResultExport'
 import { useSession } from '../context/SessionContext'
 import { useSettings } from '../context/SettingsContext'
 import { isGoogleSheetsConfigured, sendToGoogleSheets } from '../lib/googleSheets'
+import { exitFullscreen } from '../lib/fullscreen'
 
 export function SummaryScreen() {
   const navigate = useNavigate()
@@ -27,7 +28,10 @@ export function SummaryScreen() {
     if (!hydrated) return
     if (!isSessionComplete) {
       navigate('/')
+      return
     }
+    // Exit fullscreen when reaching summary screen
+    exitFullscreen()
   }, [hydrated, isSessionComplete, navigate])
 
   // Send data to Google Sheets automatically when screen loads
