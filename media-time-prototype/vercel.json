@@ -6,7 +6,27 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/demographics",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/instructions",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/media/:index",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/questionnaire/:index",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/summary",
       "destination": "/index.html"
     }
   ]
